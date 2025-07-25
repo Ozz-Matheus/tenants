@@ -56,7 +56,7 @@ class RolesSeeder extends Seeder
             ['email' => 'admin@company.test'],
             [
                 'name' => 'Admin',
-                'password' => bcrypt('admin123'),
+                'password' => bcrypt('admin@company.test'),
             ]
         );
         $admin->assignRole($adminRole);
@@ -66,7 +66,7 @@ class RolesSeeder extends Seeder
             ['email' => 'panel@company.test'],
             [
                 'name' => 'Panel User',
-                'password' => bcrypt('panel123'),
+                'password' => bcrypt('panel@company.test'),
             ]
         );
         $panelUser->assignRole($panelRole);
