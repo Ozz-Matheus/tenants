@@ -1,6 +1,6 @@
 <?php
 
-namespace TomatoPHP\FilamentTenancy\Filament\Resources;
+namespace App\Filament\Resources;
 
 use Filament\Forms;
 use Filament\Forms\Form;
