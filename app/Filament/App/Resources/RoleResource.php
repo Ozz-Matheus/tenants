@@ -152,7 +152,7 @@ class RoleResource extends Resource implements HasShieldPermissions
 
     public static function getModel(): string
     {
-        return Utils::getRoleModel();
+        return static::$model;
     }
 
     public static function getModelLabel(): string

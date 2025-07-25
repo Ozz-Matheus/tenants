@@ -89,4 +89,15 @@ return [
         'enabled' => true,
     ],
 
+    'panels' => [
+        'admin' => [
+            'role_model' => App\Models\Central\Role::class,
+            'permission_model' => App\Models\Central\Permission::class,
+        ],
+        'app' => [
+            'role_model' => App\Models\Role::class,
+            'permission_model' => App\Models\Permission::class,
+        ],
+    ],
+
 ];

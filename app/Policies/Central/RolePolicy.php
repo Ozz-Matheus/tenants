@@ -1,9 +1,9 @@
 <?php
 
-namespace App\Policies;
+namespace App\Policies\Central;
 
-use App\Models\Role;
 use App\Models\User;
+use App\Models\Central\Role;
 use Illuminate\Auth\Access\HandlesAuthorization;
 
 class RolePolicy
