@@ -17,22 +17,10 @@ class RolesSeeder extends Seeder
 
         // Crear permisos base
         $permissions = [
-            'view_process',
-            'create_process',
-            'update_process',
-            'delete_process',
-            'view_sub::process',
-            'create_sub::process',
-            'update_sub::process',
-            'delete_sub::process',
-            'view_user',
-            'create_user',
-            'update_user',
-            'delete_user',
-            'view_roles',
-            'create_roles',
-            'update_roles',
-            'delete_roles',
+            'view_role',
+            'view_any_role',
+            'create_role',
+            'update_role',
         ];
 
         // Crear y asegurar permisos
@@ -44,18 +32,24 @@ class RolesSeeder extends Seeder
         $superAdminRole->syncPermissions($permissionModels->pluck('name')->toArray());
 
         // Asignar permisos limitados al rol panel
-        $panelPermissions = [
-            'view_process',
-            'create_process',
-            'view_sub::process',
-            'create_sub::process',
-        ];
+        // $panelPermissions = [
+        //     'view_any_process',
+        //     'view_process',
+        //     'create_process',
+        //     'update_process',
+        //     'delete_process',
+        //     'view_any_sub::process',
+        //     'view_sub::process',
+        //     'create_sub::process',
+        //     'update_sub::process',
+        //     'delete_sub::process',
+        // ];
 
-        $panelPermissionModels = collect($panelPermissions)->map(function ($name) {
-            return Permission::firstOrCreate(['name' => $name]);
-        });
+        // $panelPermissionModels = collect($panelPermissions)->map(function ($name) {
+        //     return Permission::firstOrCreate(['name' => $name]);
+        // });
 
-        $panelRole->syncPermissions($panelPermissionModels->pluck('name')->toArray());
+        // $panelRole->syncPermissions($panelPermissionModels->pluck('name')->toArray());
 
         // Crear usuario admin
         $admin = User::firstOrCreate(

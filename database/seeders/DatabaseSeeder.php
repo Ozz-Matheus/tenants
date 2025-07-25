@@ -12,6 +12,7 @@ class DatabaseSeeder extends Seeder
             RolesSeeder::class,
             ProcessSeeder::class,
             SubProcessSeeder::class,
+            UserHasSubProcessesSeeder::class,
         ]);
     }
 }

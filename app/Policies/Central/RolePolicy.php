@@ -2,8 +2,8 @@
 
 namespace App\Policies\Central;
 
-use App\Models\User;
 use App\Models\Central\Role;
+use App\Models\User;
 use Illuminate\Auth\Access\HandlesAuthorization;
 
 class RolePolicy
