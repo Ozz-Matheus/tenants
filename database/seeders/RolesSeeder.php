@@ -12,7 +12,7 @@ class RolesSeeder extends Seeder
     public function run(): void
     {
         // Crear roles
-        $adminRole = Role::firstOrCreate(['name' => 'admin']);
+        $superAdminRole = Role::firstOrCreate(['name' => 'super_admin']);
         $panelRole = Role::firstOrCreate(['name' => 'panel_user']);
 
         // Crear permisos base
@@ -35,12 +35,13 @@ class RolesSeeder extends Seeder
             'delete_roles',
         ];
 
-        foreach ($permissions as $permission) {
-            Permission::firstOrCreate(['name' => $permission]);
-        }
+        // Crear y asegurar permisos
+        $permissionModels = collect($permissions)->map(function ($name) {
+            return Permission::firstOrCreate(['name' => $name]);
+        });
 
-        // Asignar todos los permisos al rol admin
-        $adminRole->syncPermissions($permissions);
+        // Asignar permisos reales al rol admin
+        $superAdminRole->syncPermissions($permissionModels->pluck('name')->toArray());
 
         // Asignar permisos limitados al rol panel
         $panelPermissions = [
@@ -49,7 +50,12 @@ class RolesSeeder extends Seeder
             'view_sub::process',
             'create_sub::process',
         ];
-        $panelRole->syncPermissions($panelPermissions);
+
+        $panelPermissionModels = collect($panelPermissions)->map(function ($name) {
+            return Permission::firstOrCreate(['name' => $name]);
+        });
+
+        $panelRole->syncPermissions($panelPermissionModels->pluck('name')->toArray());
 
         // Crear usuario admin
         $admin = User::firstOrCreate(
@@ -59,7 +65,7 @@ class RolesSeeder extends Seeder
                 'password' => bcrypt('admin@company.test'),
             ]
         );
-        $admin->assignRole($adminRole);
+        $admin->assignRole($superAdminRole);
 
         // Crear usuario panel
         $panelUser = User::firstOrCreate(
