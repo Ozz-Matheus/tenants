@@ -4,32 +4,71 @@ namespace Database\Seeders;
 
 use App\Models\User;
 use Illuminate\Database\Seeder;
+use Spatie\Permission\Models\Permission;
 use Spatie\Permission\Models\Role;
 
 class RolesSeeder extends Seeder
 {
-    /**
-     * Run the database seeds.
-     */
     public function run(): void
     {
-        $AdminRole = Role::create(['name' => 'super_admin']);
-        $userRole = Role::create(['name' => 'panel_user']);
+        // Crear roles
+        $adminRole = Role::firstOrCreate(['name' => 'admin']);
+        $panelRole = Role::firstOrCreate(['name' => 'panel_user']);
 
-        $Admin = new User;
-        $Admin->name = 'Super Admin';
-        $Admin->email = 's@tc.co';
-        $Admin->password = bcrypt('s@tc.co');
-        $Admin->save();
+        // Crear permisos base
+        $permissions = [
+            'view_process',
+            'create_process',
+            'update_process',
+            'delete_process',
+            'view_sub::process',
+            'create_sub::process',
+            'update_sub::process',
+            'delete_sub::process',
+            'view_user',
+            'create_user',
+            'update_user',
+            'delete_user',
+            'view_roles',
+            'create_roles',
+            'update_roles',
+            'delete_roles',
+        ];
 
-        $Admin->assignRole($AdminRole);
+        foreach ($permissions as $permission) {
+            Permission::firstOrCreate(['name' => $permission]);
+        }
 
-        $user = new User;
-        $user->name = 'User';
-        $user->email = 'u@tc.co';
-        $user->password = bcrypt('u@tc.co');
-        $user->save();
+        // Asignar todos los permisos al rol admin
+        $adminRole->syncPermissions($permissions);
 
-        $user->assignRole($userRole);
+        // Asignar permisos limitados al rol panel
+        $panelPermissions = [
+            'view_process',
+            'create_process',
+            'view_sub::process',
+            'create_sub::process',
+        ];
+        $panelRole->syncPermissions($panelPermissions);
+
+        // Crear usuario admin
+        $admin = User::firstOrCreate(
+            ['email' => 'admin@company.test'],
+            [
+                'name' => 'Admin',
+                'password' => bcrypt('admin123'),
+            ]
+        );
+        $admin->assignRole($adminRole);
+
+        // Crear usuario panel
+        $panelUser = User::firstOrCreate(
+            ['email' => 'panel@company.test'],
+            [
+                'name' => 'Panel User',
+                'password' => bcrypt('panel123'),
+            ]
+        );
+        $panelUser->assignRole($panelRole);
     }
 }
