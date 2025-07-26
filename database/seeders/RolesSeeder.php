@@ -4,32 +4,42 @@ namespace Database\Seeders;
 
 use App\Models\User;
 use Illuminate\Database\Seeder;
+use Spatie\Permission\Models\Permission;
 use Spatie\Permission\Models\Role;
 
 class RolesSeeder extends Seeder
 {
-    /**
-     * Run the database seeds.
-     */
     public function run(): void
     {
-        $superAdminRole = Role::create(['name' => 'super_admin']);
-        $basicRole = Role::create(['name' => 'panel_user']);
+        // Crear roles
+        $superAdminRole = Role::firstOrCreate(['name' => 'super_admin']);
+        $panelRole = Role::firstOrCreate(['name' => 'panel_user']);
 
-        $superAdmin = new User;
-        $superAdmin->name = 'Super Admin';
-        $superAdmin->email = 's@t.co';
-        $superAdmin->password = bcrypt('s@t.co');
-        $superAdmin->save();
+        // Crear permisos base
+        $permissions = [
+            'view_role',
+            'view_any_role',
+            'create_role',
+            'update_role',
+        ];
 
-        $superAdmin->assignRole($superAdminRole);
+        // Crear y asegurar permisos
+        $permissionModels = collect($permissions)->map(function ($name) {
+            return Permission::firstOrCreate(['name' => $name]);
+        });
 
-        $basic = new User;
-        $basic->name = 'User';
-        $basic->email = 'u@t.co';
-        $basic->password = bcrypt('u@t.co');
-        $basic->save();
+        // Asignar permisos reales al rol SuperAdmin
+        $superAdminRole->syncPermissions($permissionModels->pluck('name')->toArray());
 
-        $basic->assignRole($basicRole);
+        // Crear usuario admin
+        $SuperAdmin = User::firstOrCreate(
+            ['email' => 'admin@company.test'],
+            [
+                'name' => 'Admin',
+                'password' => bcrypt('admin@company.test'),
+            ]
+        );
+        $SuperAdmin->assignRole($superAdminRole);
+
     }
 }

@@ -3,6 +3,7 @@
 declare(strict_types=1);
 
 use Illuminate\Support\Facades\Route;
+
 /*
 |--------------------------------------------------------------------------
 | Tenant Routes
@@ -20,7 +21,7 @@ Route::middleware([
     'universal',
     \TomatoPHP\FilamentTenancy\FilamentTenancyServiceProvider::TENANCY_IDENTIFICATION,
 ])->group(function () {
-    if(config('filament-tenancy.features.impersonation')) {
+    if (config('filament-tenancy.features.impersonation')) {
         Route::get('/login/url', [\TomatoPHP\FilamentTenancy\Http\Controllers\LoginUrl::class, 'index']);
     }
 
