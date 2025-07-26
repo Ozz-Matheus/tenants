@@ -23,7 +23,14 @@ class RoleResource extends Resource implements HasShieldPermissions
 {
     use HasShieldFormComponents;
 
-    protected static ?string $recordTitleAttribute = 'name';
+    // protected static ?string $navigationGroup = null;
+
+    public static function getNavigationGroup(): string
+    {
+        return __('Roles Management');
+    }
+
+    protected static ?int $navigationSort = 17;
 
     public static function getPermissionPrefixes(): array
     {
@@ -49,7 +56,7 @@ class RoleResource extends Resource implements HasShieldPermissions
                                     ->label(__('filament-shield::filament-shield.field.name'))
                                     ->unique(
                                         ignoreRecord: true, /** @phpstan-ignore-next-line */
-                                        modifyRuleUsing: fn (Unique $rule) => Utils::isTenancyEnabled() ? $rule->where(Utils::getTenantModelForeignKey(), Filament::getTenant()?->id) : $rule
+                                        modifyRuleUsing: fn (Unique $rule) => ! Utils::isTenancyEnabled() ? $rule : $rule->where(Utils::getTenantModelForeignKey(), Filament::getTenant()?->id)
                                     )
                                     ->required()
                                     ->maxLength(255),
@@ -168,12 +175,12 @@ class RoleResource extends Resource implements HasShieldPermissions
         return Utils::isResourceNavigationRegistered();
     }
 
-    public static function getNavigationGroup(): ?string
-    {
-        return Utils::isResourceNavigationGroupEnabled()
-            ? __('filament-shield::filament-shield.nav.group')
-            : '';
-    }
+    // public static function getNavigationGroup(): ?string
+    // {
+    //     return Utils::isResourceNavigationGroupEnabled()
+    //         ? __('filament-shield::filament-shield.nav.group')
+    //         : '';
+    // }
 
     public static function getNavigationLabel(): string
     {
@@ -185,10 +192,10 @@ class RoleResource extends Resource implements HasShieldPermissions
         return __('filament-shield::filament-shield.nav.role.icon');
     }
 
-    public static function getNavigationSort(): ?int
-    {
-        return Utils::getResourceNavigationSort();
-    }
+    // public static function getNavigationSort(): ?int
+    // {
+    //     return Utils::getResourceNavigationSort();
+    // }
 
     public static function getSubNavigationPosition(): SubNavigationPosition
     {

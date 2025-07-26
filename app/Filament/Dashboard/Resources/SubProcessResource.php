@@ -14,7 +14,16 @@ class SubProcessResource extends Resource
 {
     protected static ?string $model = SubProcess::class;
 
+    protected static ?string $navigationGroup = null;
+
+    public static function getNavigationGroup(): string
+    {
+        return __('Global Management');
+    }
+
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+
+    protected static ?int $navigationSort = 7;
 
     public static function form(Form $form): Form
     {
@@ -88,13 +97,6 @@ class SubProcessResource extends Resource
                     //
                 ]),
             ]);
-    }
-
-    public static function getRelations(): array
-    {
-        return [
-            //
-        ];
     }
 
     public static function getPages(): array

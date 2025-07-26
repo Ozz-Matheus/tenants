@@ -13,4 +13,30 @@ class Process extends Model
     protected $fillable = [
         'title',
     ];
+
+    /*
+    |--------------------------------------------------------------------------
+    | Relaciones
+    |--------------------------------------------------------------------------
+    */
+
+    public function subProcesses()
+    {
+        return $this->hasMany(SubProcess::class);
+    }
+
+    public function docs()
+    {
+        return $this->hasMany(Doc::class);
+    }
+
+    public function actions()
+    {
+        return $this->hasMany(Action::class);
+    }
+
+    public function audits()
+    {
+        return $this->hasMany(Audit::class);
+    }
 }

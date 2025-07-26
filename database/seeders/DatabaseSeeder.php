@@ -13,6 +13,17 @@ class DatabaseSeeder extends Seeder
             ProcessSeeder::class,
             SubProcessSeeder::class,
             UserHasSubProcessesSeeder::class,
+            DocTypeSeeder::class,
+            DocExpirationSeeder::class,
+            DocEndingSeeder::class,
+            StatusSeeder::class,
+            ActionOriginSeeder::class,
+            ActionTypeSeeder::class,
+            ActionAnalysisCauseSeeder::class,
+            ActionVerificationMethodSeeder::class,
+            AuditCriteriaSeeder::class,
+            ProcessRiskSeeder::class,
+            ControlTypeSeeder::class,
         ]);
     }
 }

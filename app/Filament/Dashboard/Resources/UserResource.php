@@ -9,12 +9,22 @@ use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
+use Illuminate\Database\Eloquent\Builder;
 
 class UserResource extends Resource
 {
     protected static ?string $model = User::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+    // protected static ?string $navigationGroup = null;
+
+    public static function getNavigationGroup(): string
+    {
+        return __('Users Management');
+    }
+
+    protected static ?string $navigationIcon = 'heroicon-o-users';
+
+    protected static ?int $navigationSort = 18;
 
     public static function form(Form $form): Form
     {
@@ -44,11 +54,11 @@ class UserResource extends Resource
                                     ? __("Leave it blank if you don't want to change your password.")
                                     : null
                             ),
-                        // Forms\Components\Toggle::make('active')
-                        //     ->label(__('Active'))
-                        //     ->helperText(__('Enables or disables user access.'))
-                        //     ->required()
-                        //     ->default(true),
+                        Forms\Components\Toggle::make('active')
+                            ->label(__('Active'))
+                            ->helperText(__('Enables or disables user access.'))
+                            ->required()
+                            ->default(true),
                         Forms\Components\Select::make('roles')
                             ->label(__('Roles'))
                             ->relationship('roles', 'name')
@@ -64,6 +74,17 @@ class UserResource extends Resource
 
                                 return $roles;
                             }),
+                        Forms\Components\CheckboxList::make('subProcesses')
+                            ->relationship('subProcesses', 'title')
+                            ->label(__('Assigned Sub Processes :'))
+                            ->disableOptionWhen(function ($value, $record) {
+                                return $record?->isLeaderOfSubProcess($value);
+                            })
+                            ->helperText(
+                                fn (string $context) => $context === 'edit'
+                                    ? __('The user cannot be unlinked from the subprocess if he is linked to it as a leader.')
+                                    : null
+                            ),
                     ]),
             ]);
     }
@@ -113,13 +134,6 @@ class UserResource extends Resource
             ]);
     }
 
-    public static function getRelations(): array
-    {
-        return [
-            //
-        ];
-    }
-
     public static function getPages(): array
     {
         return [
@@ -127,5 +141,18 @@ class UserResource extends Resource
             'create' => Pages\CreateUser::route('/create'),
             'edit' => Pages\EditUser::route('/{record}/edit'),
         ];
+    }
+
+    public static function getEloquentQuery(): Builder
+    {
+        $query = parent::getEloquentQuery();
+
+        if (! auth()->user()->hasRole('super_admin')) {
+            $query->whereDoesntHave('roles', function ($q) {
+                $q->where('name', 'super_admin');
+            });
+        }
+
+        return $query;
     }
 }

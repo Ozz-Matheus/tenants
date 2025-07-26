@@ -37,4 +37,24 @@ class SubProcess extends Model
     {
         return $this->belongsToMany(User::class, 'user_has_sub_processes');
     }
+
+    public function docs()
+    {
+        return $this->hasMany(Doc::class);
+    }
+
+    public function actions()
+    {
+        return $this->hasMany(Action::class);
+    }
+
+    /* public function audits()
+    {
+        return $this->belongsToMany(Audit::class, 'audit_has_sub_processes');
+    } */ // se retira este metodo por la eliminación de la tabla pivot (audit_has_sub_processes)
+
+    public function findings()
+    {
+        return $this->hasMany(Finding::class);
+    }
 }
