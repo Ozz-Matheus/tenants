@@ -20,18 +20,51 @@ class UserResource extends Resource
     {
         return $form
             ->schema([
-                Forms\Components\TextInput::make('name')
-                    ->required()
-                    ->maxLength(255),
-                Forms\Components\TextInput::make('email')
-                    ->email()
-                    ->required()
-                    ->maxLength(255),
-                Forms\Components\DateTimePicker::make('email_verified_at'),
-                Forms\Components\TextInput::make('password')
-                    ->password()
-                    ->required()
-                    ->maxLength(255),
+                Forms\Components\Section::make(__('User Data'))
+                    ->columns(3)
+                    ->schema([
+                        Forms\Components\TextInput::make('name')
+                            ->label(__('Name'))
+                            ->required()
+                            ->maxLength(255),
+                        Forms\Components\TextInput::make('email')
+                            ->label(__('Email'))
+                            ->email()
+                            ->required()
+                            ->maxLength(255),
+                        Forms\Components\TextInput::make('password')
+                            ->label(__('Password'))
+                            ->password()
+                            ->maxLength(255)
+                            ->nullable()
+                            ->dehydrated(fn ($state) => filled($state)) // solo lo manda si tiene valor
+                            ->required(fn (string $context) => $context === 'create')
+                            ->helperText(
+                                fn (string $context) => $context === 'edit'
+                                    ? __("Leave it blank if you don't want to change your password.")
+                                    : null
+                            ),
+                        // Forms\Components\Toggle::make('active')
+                        //     ->label(__('Active'))
+                        //     ->helperText(__('Enables or disables user access.'))
+                        //     ->required()
+                        //     ->default(true),
+                        Forms\Components\Select::make('roles')
+                            ->label(__('Roles'))
+                            ->relationship('roles', 'name')
+                            ->multiple()
+                            ->preload()
+                            ->searchable()
+                            ->options(function () {
+                                $roles = \Spatie\Permission\Models\Role::pluck('name', 'id');
+
+                                if (! auth()->user()->hasRole('super_admin')) {
+                                    $roles = $roles->reject(fn ($name) => $name === 'super_admin');
+                                }
+
+                                return $roles;
+                            }),
+                    ]),
             ]);
     }
 
@@ -40,17 +73,29 @@ class UserResource extends Resource
         return $table
             ->columns([
                 Tables\Columns\TextColumn::make('name')
+                    ->label(__('Name'))
                     ->searchable(),
                 Tables\Columns\TextColumn::make('email')
+                    ->label(__('Email'))
+                    ->copyable()
+                    ->copyMessage(__('Email copied to clipboard'))
                     ->searchable(),
-                Tables\Columns\TextColumn::make('email_verified_at')
-                    ->dateTime()
+                Tables\Columns\TextColumn::make('roles.name')
+                    ->label(__('Roles'))
+                    ->searchable()
                     ->sortable(),
+                Tables\Columns\TextColumn::make('email_verified_at')
+                    ->label(__('Email verified at'))
+                    ->dateTime()
+                    ->sortable()
+                    ->toggleable(isToggledHiddenByDefault: true),
                 Tables\Columns\TextColumn::make('created_at')
+                    ->label(__('Created at'))
                     ->dateTime()
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
                 Tables\Columns\TextColumn::make('updated_at')
+                    ->label(__('Updated at'))
                     ->dateTime()
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
@@ -63,7 +108,7 @@ class UserResource extends Resource
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
-                    Tables\Actions\DeleteBulkAction::make(),
+                    //
                 ]),
             ]);
     }

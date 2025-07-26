@@ -47,7 +47,7 @@ return [
          * Tenant database names are created like this:
          * prefix + tenant_id + suffix.
          */
-        'prefix' => 'tomatophp_',
+        'prefix' => 'register_',
         'suffix' => '_db',
 
         /**
