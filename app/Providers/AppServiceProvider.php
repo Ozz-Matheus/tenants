@@ -3,8 +3,10 @@
 namespace App\Providers;
 
 use Filament\Facades\Filament;
+use Illuminate\Support\Facades\File;
 use Illuminate\Support\ServiceProvider;
 use Spatie\Permission\PermissionRegistrar;
+use Stancl\Tenancy\Events\TenancyBootstrapped;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -33,5 +35,26 @@ class AppServiceProvider extends ServiceProvider
                 app(PermissionRegistrar::class)->cacheKey = $cacheKey;
             }
         });
+
+        // Este bloque crea automáticamente el directorio para el tenant
+        \Event::listen(TenancyBootstrapped::class, function ($event) {
+            $tenantId = tenant()?->getTenantKey();
+
+            $suffixBase = config('tenancy.filesystem.suffix_base');
+
+            if (! $tenantId) {
+                return;
+            }
+
+            $tenantStoragePath = storage_path();
+
+            if (! File::exists($tenantStoragePath)) {
+                File::makeDirectory($tenantStoragePath.'/app/public', 0777, true);
+                File::makeDirectory($tenantStoragePath.'/framework/cache', 0777, true);
+
+                symlink("{$tenantStoragePath}/app/public", public_path("{$suffixBase}{$tenantId}"));
+            }
+        });
+
     }
 }
