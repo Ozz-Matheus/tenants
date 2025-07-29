@@ -7,8 +7,9 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Storage;
 use OwenIt\Auditing\Auditable as AuditableTrait;
+use OwenIt\Auditing\Contracts\Auditable as AuditableContract;
 
-class Doc extends Model
+class Doc extends Model implements AuditableContract
 {
     /** @use HasFactory<\Database\Factories\DocFactory> */
     use AuditableTrait, HasFactory;
