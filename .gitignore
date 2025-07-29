@@ -22,3 +22,6 @@
 Homestead.json
 Homestead.yaml
 Thumbs.db
+# Ignorar carpetas específicas por tenant
+/public/tenant*
+/storage/tenant*
