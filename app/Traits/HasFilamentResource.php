@@ -2,9 +2,9 @@
 
 namespace App\Traits;
 
-use App\Filament\Resources\CorrectiveResource;
-use App\Filament\Resources\ImproveResource;
-use App\Filament\Resources\PreventiveResource;
+use App\Filament\Dashboard\Resources\CorrectiveResource;
+use App\Filament\Dashboard\Resources\ImproveResource;
+use App\Filament\Dashboard\Resources\PreventiveResource;
 
 trait HasFilamentResource
 {

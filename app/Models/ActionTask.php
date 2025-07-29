@@ -3,9 +3,13 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use OwenIt\Auditing\Auditable as AuditableTrait;
+use OwenIt\Auditing\Contracts\Auditable as AuditableContract;
 
-class ActionTask extends Model
+class ActionTask extends Model implements AuditableContract
 {
+    use AuditableTrait;
+
     protected $fillable = [
         'action_id',
         'title',

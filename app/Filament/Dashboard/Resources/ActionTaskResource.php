@@ -10,6 +10,7 @@ use Filament\Forms;
 use Filament\Forms\Components\Section;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
+use Tapp\FilamentAuditing\RelationManagers\AuditsRelationManager;
 
 class ActionTaskResource extends Resource
 {
@@ -96,6 +97,7 @@ class ActionTaskResource extends Resource
             //
             ActionTaskCommentsRelationManager::class,
             ActionTaskFilesRelationManager::class,
+            AuditsRelationManager::class,
         ];
     }
 
