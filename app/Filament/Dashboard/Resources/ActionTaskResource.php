@@ -3,6 +3,7 @@
 namespace App\Filament\Dashboard\Resources;
 
 use App\Filament\Dashboard\Resources\ActionTaskResource\Pages;
+use App\Filament\Dashboard\Resources\ActionTaskResource\RelationManagers\ActionTaskAuditsRelationManager;
 use App\Filament\Dashboard\Resources\ActionTaskResource\RelationManagers\ActionTaskCommentsRelationManager;
 use App\Filament\Dashboard\Resources\ActionTaskResource\RelationManagers\ActionTaskFilesRelationManager;
 use App\Models\ActionTask;
@@ -10,7 +11,6 @@ use Filament\Forms;
 use Filament\Forms\Components\Section;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
-use Tapp\FilamentAuditing\RelationManagers\AuditsRelationManager;
 
 class ActionTaskResource extends Resource
 {
@@ -97,7 +97,7 @@ class ActionTaskResource extends Resource
             //
             ActionTaskCommentsRelationManager::class,
             ActionTaskFilesRelationManager::class,
-            AuditsRelationManager::class,
+            ActionTaskAuditsRelationManager::class,
         ];
     }
 

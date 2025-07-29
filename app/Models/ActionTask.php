@@ -3,7 +3,9 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Str;
 use OwenIt\Auditing\Auditable as AuditableTrait;
+use OwenIt\Auditing\Contracts\Audit as AuditContract;
 use OwenIt\Auditing\Contracts\Auditable as AuditableContract;
 
 class ActionTask extends Model implements AuditableContract
@@ -68,5 +70,67 @@ class ActionTask extends Model implements AuditableContract
     public function files()
     {
         return $this->morphMany(File::class, 'fileable');
+    }
+
+    public function formatAuditFieldsForPresentation($field, AuditContract $record)
+    {
+        $fields = \Illuminate\Support\Arr::wrap($record->{$field} ?? []);
+
+        $translations = [
+            'action_id' => __('Acción'),
+            'title' => __('Título'),
+            'detail' => __('Detalle'),
+            'responsible_by_id' => __('Responsable'),
+            'start_date' => __('Fecha de inicio'),
+            'deadline' => __('Fecha límite'),
+            'actual_start_date' => __('Inicio real'),
+            'actual_closing_date' => __('Cierre real'),
+            'status_id' => __('Estado'),
+        ];
+
+        $omitFields = ['id'];
+
+        $formatted = [];
+
+        foreach ($fields as $key => $value) {
+            $keyLower = Str::of($key)->snake()->value();
+            $label = $translations[$keyLower] ?? Str::headline($keyLower);
+
+            if (in_array($keyLower, $omitFields)) {
+                continue;
+            }
+
+            if ($keyLower === 'action_id') {
+                $value = optional(\App\Models\Action::find($value))->title ?? $value;
+            }
+
+            if ($keyLower === 'status_id') {
+                $value = optional(\App\Models\Status::find($value))->label ?? $value;
+            }
+
+            if ($keyLower === 'responsible_by_id') {
+                $value = optional(\App\Models\User::find($value))->name ?? $value;
+            }
+
+            if (in_array($keyLower, ['start_date', 'deadline', 'actual_start_date', 'actual_closing_date'])) {
+                try {
+                    \Carbon\Carbon::setLocale(app()->getLocale());
+                    $value = \Carbon\Carbon::parse($value)->isoFormat('MMM D, YYYY');
+                } catch (\Throwable $e) {
+                    //
+                }
+            }
+
+            $value = match (true) {
+                is_scalar($value) => (string) $value,
+                $value instanceof \DateTimeInterface => $value->format('d/m/Y H:i'),
+                is_array($value), is_object($value) => json_encode($value, JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT) ?: '[Valor no representable]',
+                default => '[Valor no representable]',
+            };
+
+            $formatted[] = "{$label}: <strong>{$value}</strong>";
+        }
+
+        return implode('<br>', $formatted);
     }
 }

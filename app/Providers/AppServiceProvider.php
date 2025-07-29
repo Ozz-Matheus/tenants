@@ -4,6 +4,7 @@ namespace App\Providers;
 
 use App\Services\TenantStorageInitializer;
 use Filament\Facades\Filament;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\ServiceProvider;
 use Spatie\Permission\PermissionRegistrar;
 use Stancl\Tenancy\Events\TenancyBootstrapped;
@@ -23,6 +24,15 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
+
+        Gate::define('audit', function ($user, $resource) {
+            return $user->hasRole('super_admin');
+        });
+
+        Gate::define('restoreAudit', function ($user, $resource) {
+            return $user->hasRole('super_admin');
+        });
+
         Filament::serving(function () {
 
             if ($user = auth()->user()) {

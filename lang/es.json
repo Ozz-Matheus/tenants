@@ -140,6 +140,7 @@
 
     "Create action": "Crear acción",
 
+    "Action": "Acción",
     "Actions": "Acciones",
     "View action completion": "Ver finalización de la acción",
     "End action": "Finalizar acción",
@@ -259,5 +260,10 @@
     "The task has completed!": "¡La tarea ha sido completada!",
     "Task close to expiration!": "¡Tarea próxima a expirar!",
     "New version status!": "¡Nueva estado de versión!",
-    "Document status: ": "Estado del documento: "
+    "Document status: ": "Estado del documento: ",
+
+    "Created": "Creado",
+    "Updated": "Actualizado",
+    "Deleted": "Eliminado",
+    "Restored": "Restaurado"
 }
