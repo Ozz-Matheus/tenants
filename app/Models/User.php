@@ -98,7 +98,7 @@ class User extends Authenticatable implements FilamentUser
 
     public function audits()
     {
-        return $this->belongsToMany(Audit::class, 'audit_has_users');
+        return $this->belongsToMany(ProcessAudit::class, 'audit_has_users');
     }
 
     public function findings()

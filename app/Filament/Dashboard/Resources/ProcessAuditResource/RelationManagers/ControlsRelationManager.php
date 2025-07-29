@@ -1,8 +1,7 @@
 <?php
 
-namespace App\Filament\Dashboard\Resources\AuditResource\RelationManagers;
+namespace App\Filament\Dashboard\Resources\ProcessAuditResource\RelationManagers;
 
-use App\Filament\Dashboard\Resources\AuditResource;
 use Filament\Resources\RelationManagers\RelationManager;
 use Filament\Tables;
 use Filament\Tables\Table;
@@ -58,7 +57,7 @@ class ControlsRelationManager extends RelationManager
                     /* ->authorize(
                         fn (User $user) => $user->canCreateFinding($this->getOwnerRecord())
                     ) */
-                    ->url(fn () => AuditResource::getUrl('audit_control.create', [
+                    ->url(fn () => ProcessAuditResource::getUrl('audit_control.create', [
                         'audit' => $this->getOwnerRecord()->id,
                     ])),
             ])
@@ -70,7 +69,7 @@ class ControlsRelationManager extends RelationManager
                     /* ->authorize(
                         fn (User $user) => $user->canCreateFinding($this->getOwnerRecord())
                     ) */ // 📌 aqui se cambiará el metodo para que tambien ingrese el responsable (lider del proceso en este caso)
-                    ->url(fn ($record) => AuditResource::getUrl('audit_control.view', [
+                    ->url(fn ($record) => ProcessAuditResource::getUrl('audit_control.view', [
                         'audit' => $this->getOwnerRecord()->id,
                         'record' => $record->id,
                     ])),

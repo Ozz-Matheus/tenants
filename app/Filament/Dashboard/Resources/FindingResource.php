@@ -4,8 +4,8 @@ namespace App\Filament\Dashboard\Resources;
 
 use App\Filament\Dashboard\Resources\FindingResource\Pages;
 use App\Filament\Dashboard\Resources\FindingResource\RelationManagers\ActionsRelationManager;
-use App\Models\Audit;
 use App\Models\Finding;
+use App\Models\ProcessAudit;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
@@ -52,7 +52,7 @@ class FindingResource extends Resource
                             ->required(),
                         /* Forms\Components\Select::make('audited_sub_process_id')
                             ->label(__('Audited sub process'))
-                            ->options(fn (Forms\Get $get): array => Audit::findOrFail($get('audit_id'))
+                            ->options(fn (Forms\Get $get): array => ProcessAudit::findOrFail($get('audit_id'))
                                 ?->involvedSubProcesses
                                 ?->pluck('title', 'id')
                                 ?->toArray() ?? [])

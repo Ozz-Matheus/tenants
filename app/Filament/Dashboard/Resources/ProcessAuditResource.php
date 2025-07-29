@@ -2,18 +2,18 @@
 
 namespace App\Filament\Dashboard\Resources;
 
-use App\Filament\Dashboard\Resources\AuditResource\Pages;
-use App\Filament\Dashboard\Resources\AuditResource\RelationManagers\ControlsRelationManager;
-use App\Models\Audit;
+use App\Filament\Dashboard\Resources\ProcessAuditResource\Pages;
+use App\Filament\Dashboard\Resources\ProcessAuditResource\RelationManagers\ControlsRelationManager;
+use App\Models\ProcessAudit;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
 
-class AuditResource extends Resource
+class ProcessAuditResource extends Resource
 {
-    protected static ?string $model = Audit::class;
+    protected static ?string $model = ProcessAudit::class;
 
     protected static ?string $modelLabel = null;
 

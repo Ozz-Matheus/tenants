@@ -2,7 +2,7 @@
 
 namespace App\Filament\Dashboard\Resources\FindingResource\RelationManagers;
 
-use App\Filament\Dashboard\Resources\AuditResource;
+use App\Filament\Dashboard\Resources\ProcessAuditResource;
 use Filament\Resources\RelationManagers\RelationManager;
 use Filament\Tables;
 use Filament\Tables\Table;
@@ -95,7 +95,7 @@ class ActionsRelationManager extends RelationManager
 
                         $actionType = $finding->getMappedActionType();
 
-                        return AuditResource::getUrl("{$actionType}_action.create", [
+                        return ProcessAuditResource::getUrl("{$actionType}_action.create", [
                             'audit' => $finding->control->audit_id,
                             'control' => $finding->control_id,
                             'finding' => $finding->id,

@@ -4,7 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Audit extends Model
+class ProcessAudit extends Model
 {
     //
     protected $fillable = [

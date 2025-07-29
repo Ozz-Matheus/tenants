@@ -2,11 +2,11 @@
 
 namespace App\Policies;
 
-use App\Models\Audit;
+use App\Models\ProcessAudit;
 use App\Models\User;
 use Illuminate\Auth\Access\HandlesAuthorization;
 
-class AuditPolicy
+class ProcessAuditPolicy
 {
     use HandlesAuthorization;
 
@@ -15,15 +15,15 @@ class AuditPolicy
      */
     public function viewAny(User $user): bool
     {
-        return $user->can('view_any_audit');
+        return $user->can('view_any_process::audit');
     }
 
     /**
      * Determine whether the user can view the model.
      */
-    public function view(User $user, Audit $audit): bool
+    public function view(User $user, ProcessAudit $processAudit): bool
     {
-        return $user->can('view_audit');
+        return $user->can('view_process::audit');
     }
 
     /**
@@ -31,23 +31,23 @@ class AuditPolicy
      */
     public function create(User $user): bool
     {
-        return $user->can('create_audit');
+        return $user->can('create_process::audit');
     }
 
     /**
      * Determine whether the user can update the model.
      */
-    public function update(User $user, Audit $audit): bool
+    public function update(User $user, ProcessAudit $processAudit): bool
     {
-        return $user->can('update_audit');
+        return $user->can('update_process::audit');
     }
 
     /**
      * Determine whether the user can delete the model.
      */
-    public function delete(User $user, Audit $audit): bool
+    public function delete(User $user, ProcessAudit $processAudit): bool
     {
-        return $user->can('delete_audit');
+        return $user->can('delete_process::audit');
     }
 
     /**
@@ -55,15 +55,15 @@ class AuditPolicy
      */
     public function deleteAny(User $user): bool
     {
-        return $user->can('delete_any_audit');
+        return $user->can('delete_any_process::audit');
     }
 
     /**
      * Determine whether the user can permanently delete.
      */
-    public function forceDelete(User $user, Audit $audit): bool
+    public function forceDelete(User $user, ProcessAudit $processAudit): bool
     {
-        return $user->can('force_delete_audit');
+        return $user->can('force_delete_process::audit');
     }
 
     /**
@@ -71,15 +71,15 @@ class AuditPolicy
      */
     public function forceDeleteAny(User $user): bool
     {
-        return $user->can('force_delete_any_audit');
+        return $user->can('force_delete_any_process::audit');
     }
 
     /**
      * Determine whether the user can restore.
      */
-    public function restore(User $user, Audit $audit): bool
+    public function restore(User $user, ProcessAudit $processAudit): bool
     {
-        return $user->can('restore_audit');
+        return $user->can('restore_process::audit');
     }
 
     /**
@@ -87,15 +87,15 @@ class AuditPolicy
      */
     public function restoreAny(User $user): bool
     {
-        return $user->can('restore_any_audit');
+        return $user->can('restore_any_process::audit');
     }
 
     /**
      * Determine whether the user can replicate.
      */
-    public function replicate(User $user, Audit $audit): bool
+    public function replicate(User $user, ProcessAudit $processAudit): bool
     {
-        return $user->can('replicate_audit');
+        return $user->can('replicate_process::audit');
     }
 
     /**
@@ -103,6 +103,6 @@ class AuditPolicy
      */
     public function reorder(User $user): bool
     {
-        return $user->can('reorder_audit');
+        return $user->can('reorder_process::audit');
     }
 }

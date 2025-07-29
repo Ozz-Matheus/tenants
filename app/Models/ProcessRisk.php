@@ -22,6 +22,6 @@ class ProcessRisk extends Model
 
     public function audits()
     {
-        return $this->belongsToMany(Audit::class, 'audit_has_process_risks');
+        return $this->belongsToMany(ProcessAudit::class, 'audit_has_process_risks');
     }
 }

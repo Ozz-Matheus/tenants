@@ -1,14 +1,14 @@
 <?php
 
-namespace App\Filament\Dashboard\Resources\AuditResource\Pages;
+namespace App\Filament\Dashboard\Resources\ProcessAuditResource\Pages;
 
-use App\Filament\Dashboard\Resources\AuditResource;
+use App\Filament\Dashboard\Resources\ProcessAuditResource;
 use App\Models\Status;
 use Filament\Resources\Pages\CreateRecord;
 
 class CreateAudit extends CreateRecord
 {
-    protected static string $resource = AuditResource::class;
+    protected static string $resource = ProcessAuditResource::class;
 
     protected function mutateFormDataBeforeCreate(array $data): array
     {

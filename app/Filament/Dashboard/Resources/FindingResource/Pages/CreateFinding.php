@@ -2,8 +2,8 @@
 
 namespace App\Filament\Dashboard\Resources\FindingResource\Pages;
 
-use App\Filament\Dashboard\Resources\AuditResource;
 use App\Filament\Dashboard\Resources\FindingResource;
+use App\Filament\Dashboard\Resources\ProcessAuditResource;
 use App\Models\Finding;
 use App\Models\Status;
 use App\Services\AuditStatusService;
@@ -43,7 +43,7 @@ class CreateFinding extends CreateRecord
 
     protected function getRedirectUrl(): string
     {
-        return AuditResource::getUrl('audit_control.view', [
+        return ProcessAuditResource::getUrl('audit_control.view', [
             'audit' => $this->controlModel->audit_id,
             'record' => $this->control_id]);
     }
@@ -61,8 +61,8 @@ class CreateFinding extends CreateRecord
     /* public function getBreadcrumbs(): array
     {
         return [
-            AuditResource::getUrl('view', ['record' => $this->control_id]) => 'Audit',
-            AuditResource::getUrl('audit_finding.create', ['audit' => $this->control_id]) => 'Finding',
+            ProcessAuditResource::getUrl('view', ['record' => $this->control_id]) => 'Audit',
+            ProcessAuditResource::getUrl('audit_finding.create', ['audit' => $this->control_id]) => 'Finding',
             false => 'Create',
         ];
     } */

@@ -2,8 +2,8 @@
 
 namespace App\Traits;
 
-use App\Models\Audit;
 use App\Models\DocVersion;
+use App\Models\ProcessAudit;
 use App\Models\SubProcess;
 
 trait HasUserLogic
@@ -54,7 +54,7 @@ trait HasUserLogic
 
     // Metodos para auditoria
 
-    /* public function canCreateFinding(Audit $audit)
+    /* public function canCreateFinding(ProcessAudit $audit)
     {
         return auth()->id() === $audit->leader_auditor_id;
     } */

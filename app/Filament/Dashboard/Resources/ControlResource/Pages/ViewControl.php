@@ -2,8 +2,8 @@
 
 namespace App\Filament\Dashboard\Resources\ControlResource\Pages;
 
-use App\Filament\Dashboard\Resources\AuditResource;
 use App\Filament\Dashboard\Resources\ControlResource;
+use App\Filament\Dashboard\Resources\ProcessAuditResource;
 use App\Traits\HasAuditContext;
 use Filament\Actions\Action;
 use Filament\Resources\Pages\ViewRecord;
@@ -35,7 +35,7 @@ class ViewControl extends ViewRecord
                 ])) */,
             Action::make('back')
                 ->label(__('Return'))
-                ->url(fn (): string => AuditResource::getUrl('view', ['record' => $this->audit_id]))
+                ->url(fn (): string => ProcessAuditResource::getUrl('view', ['record' => $this->audit_id]))
                 ->button()
                 ->color('gray'),
         ];

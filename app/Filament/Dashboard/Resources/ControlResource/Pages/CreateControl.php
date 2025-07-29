@@ -2,8 +2,8 @@
 
 namespace App\Filament\Dashboard\Resources\ControlResource\Pages;
 
-use App\Filament\Dashboard\Resources\AuditResource;
 use App\Filament\Dashboard\Resources\ControlResource;
+use App\Filament\Dashboard\Resources\ProcessAuditResource;
 use App\Models\Status;
 use App\Traits\HasAuditContext;
 use Filament\Resources\Pages\CreateRecord;
@@ -31,7 +31,7 @@ class CreateControl extends CreateRecord
 
     protected function getRedirectUrl(): string
     {
-        return AuditResource::getUrl('view', ['record' => $this->audit_id]);
+        return ProcessAuditResource::getUrl('view', ['record' => $this->audit_id]);
     }
 
     public static function canCreateAnother(): bool

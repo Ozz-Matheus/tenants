@@ -2,7 +2,7 @@
 
 namespace App\Services;
 
-use App\Models\Audit;
+use App\Models\ProcessAudit;
 use App\Models\Status;
 
 /**
@@ -10,7 +10,7 @@ use App\Models\Status;
  */
 class AuditStatusService
 {
-    public function statusChangesInAudits(Audit $audit, string $status): bool
+    public function statusChangesInAudits(ProcessAudit $audit, string $status): bool
     {
         $statusChangeId = Status::byContextAndTitle('audit', $status)?->id;
         $plannedId = Status::byContextAndTitle('audit', 'planned')?->id;

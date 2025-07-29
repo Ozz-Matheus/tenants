@@ -2,18 +2,18 @@
 
 namespace App\Traits;
 
-use App\Models\Audit;
+use App\Models\ProcessAudit;
 
 trait HasAuditContext
 {
     public ?int $audit_id = null;
 
-    public ?Audit $auditModel = null;
+    public ?ProcessAudit $auditModel = null;
 
     public function loadAuditContext(): void
     {
         $this->audit_id = request()->route('audit');
 
-        $this->auditModel = Audit::findOrFail($this->audit_id);
+        $this->auditModel = ProcessAudit::findOrFail($this->audit_id);
     }
 }

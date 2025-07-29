@@ -6,11 +6,12 @@ use App\Services\DocService;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Storage;
+use OwenIt\Auditing\Auditable as AuditableTrait;
 
 class Doc extends Model
 {
     /** @use HasFactory<\Database\Factories\DocFactory> */
-    use HasFactory;
+    use AuditableTrait, HasFactory;
 
     protected $fillable = [
         'title',

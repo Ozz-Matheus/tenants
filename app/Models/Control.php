@@ -20,7 +20,7 @@ class Control extends Model
 
     public function audit()
     {
-        return $this->belongsTo(Audit::class, 'audit_id');
+        return $this->belongsTo(ProcessAudit::class, 'audit_id');
     }
 
     public function controlType()
