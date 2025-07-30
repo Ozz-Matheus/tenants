@@ -3,35 +3,41 @@
 namespace App\Jobs;
 
 use Illuminate\Bus\Queueable;
-use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Config;
-use Illuminate\Support\Facades\DB;
 
-class BackupCentralDatabase implements ShouldQueue
+class BackupCentral
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
     public function handle(): void
     {
-        \Log::info('🔄 Iniciando respaldo de base central...');
 
         $defaultConn = config('database.default');
         $dbName = config("database.connections.{$defaultConn}.database");
 
+        // Establecer nombre único del backup
         Config::set('backup.backup.name', 'central-'.$dbName);
 
-        DB::purge($defaultConn);
-        DB::reconnect($defaultConn);
+        // Limpiar respaldos antiguos
+        // Artisan::call('backup:clean', [
+        //     '--disable-notifications' => true,
+        // ]);
 
+        // Ejecutar backup de solo la base de datos
         Artisan::call('backup:run', [
-            '--only-db' => true,
+            '--only-db' => false,
             '--disable-notifications' => true,
         ]);
 
-        \Log::info("✅ Backup completado para base central: {$dbName}");
+        // Log dedicado
+        file_put_contents(
+            storage_path('logs/backup-central.log'),
+            '['.now()->toDateTimeString()."] [{$dbName}] ".Artisan::output()."\n",
+            FILE_APPEND
+        );
     }
 }
