@@ -17,6 +17,8 @@ $pdfMime = ['application/pdf'];
 
 return [
 
+    'central_domain' => env('CENTRAL_DOMAIN', 'localhost'),
+
     /*
     |--------------------------------------------------------------------------
     | Configuración del Super Admin

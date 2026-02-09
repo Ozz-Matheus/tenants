@@ -28,11 +28,11 @@ class ProjectResetCommand extends Command
         $this->call('db:seed', ['--class' => 'RolesSeeder']);
         $this->call('db:seed', ['--class' => 'AdminSeeder']);
 
-        // $this->info('Generando permisos Shield para Dashboard...');
-        // $this->call('shield:generate', ['--all' => true, '--panel' => 'dashboard']);
-
         $this->info('Generando permisos Shield para Admin...');
         $this->call('shield:generate', ['--all' => true, '--panel' => 'admin']);
+
+        $this->info('Generando permisos Shield para Dashboard...');
+        $this->call('shield:generate', ['--all' => true, '--panel' => 'dashboard']);
 
         $this->info('¡Proyecto reseteado correctamente!');
 
