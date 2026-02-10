@@ -25,13 +25,16 @@ class TenantStorageInitializer
         $publicDir = config('holdingtec.filesystem.tenancy_public_dir', 'public');
         $publicPath = base_path("{$publicDir}/{$suffixBase}{$tenantId}");
 
+        // Asignamos el disco a una variable para mayor claridad
+        $disk = config('holdingtec.uploads.disk', 'public');
+
         // Asegura directorios necesarios
         $this->filesystem->ensureDirectoryExists("{$tenantStoragePath}/app/private", 0755, true);
         $this->filesystem->ensureDirectoryExists("{$tenantStoragePath}/app/public", 0755, true);
         $this->filesystem->ensureDirectoryExists("{$tenantStoragePath}/framework/cache", 0755, true);
 
-        // Crea enlace simbólico si no existe
-        if (! $this->filesystem->exists($publicPath)) {
+        // Crea enlace simbólico solo si el disco es 'public' y no existe el enlace
+        if ($disk === 'public' && ! $this->filesystem->exists($publicPath)) {
             try {
                 $this->filesystem->link(
                     "{$tenantStoragePath}/app/public",
