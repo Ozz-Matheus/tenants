@@ -15,17 +15,17 @@ class DatabaseSeeder extends Seeder
     public function run(): void
     {
         $this->call([
-            // HeadquarterSeeder::class,
+            HeadquarterSeeder::class,
             RolesSeeder::class,
-            // ProcessSeeder::class,
-            // SubProcessSeeder::class,
-            // UserHasSubProcessesSeeder::class,
-            // UsersLeadSubProcessesSeeder::class,
+            ProcessSeeder::class,
+            SubProcessSeeder::class,
+            UserHasSubProcessesSeeder::class,
+            UsersLeadSubProcessesSeeder::class,
             // Documentos
-            // DocTypeSeeder::class,
-            // DocStorageSeeder::class,
-            // DocRecoverySeeder::class,
-            // DocDispositionSeeder::class,
+            DocTypeSeeder::class,
+            DocStorageSeeder::class,
+            DocRecoverySeeder::class,
+            DocDispositionSeeder::class,
         ]);
     }
 }

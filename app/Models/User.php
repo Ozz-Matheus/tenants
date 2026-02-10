@@ -4,17 +4,21 @@ namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 use App\Enums\RoleEnum;
+use App\Support\AppNotifier;
+use App\Traits\HasUserLogic;
 use Filament\Models\Contracts\FilamentUser;
 use Filament\Panel;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Facades\Auth;
 use Spatie\Permission\Traits\HasRoles;
 
 class User extends Authenticatable implements FilamentUser
 {
     /** @use HasFactory<\Database\Factories\UserFactory> */
-    use HasFactory, HasRoles, Notifiable;
+    use HasFactory, HasRoles, HasUserLogic, Notifiable, SoftDeletes;
 
     /**
      * The attributes that are mass assignable.
@@ -25,6 +29,10 @@ class User extends Authenticatable implements FilamentUser
         'name',
         'email',
         'password',
+        'active',
+        'headquarter_id',
+        'view_all_headquarters',
+        'interact_with_all_headquarters',
     ];
 
     /**
@@ -47,7 +55,52 @@ class User extends Authenticatable implements FilamentUser
         return [
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
+            'active' => 'boolean',
+            'view_all_headquarters' => 'boolean',
+            'interact_with_all_headquarters' => 'boolean',
+            'deleted_at' => 'datetime',
         ];
+    }
+
+    /*
+    |--------------------------------------------------------------------------
+    | Relaciones
+    |--------------------------------------------------------------------------
+    */
+
+    public function headquarter()
+    {
+        return $this->belongsTo(Headquarter::class);
+    }
+
+    public function docs()
+    {
+        return $this->hasMany(Doc::class);
+    }
+
+    public function docVersions()
+    {
+        return $this->hasMany(DocVersion::class);
+    }
+
+    public function subprocesses()
+    {
+        return $this->belongsToMany(Subprocess::class, 'user_has_subprocesses');
+    }
+
+    public function leaderOf()
+    {
+        return $this->belongsToMany(Subprocess::class, 'users_lead_subprocesses');
+    }
+
+    public function leadSubprocesses()
+    {
+        return $this->belongsToMany(Subprocess::class, 'users_lead_subprocesses', 'user_id', 'subprocess_id');
+    }
+
+    public function accessToAdditionalUsers()
+    {
+        return $this->belongsToMany(Doc::class, 'docs_has_confidential_users', 'doc_id', 'user_id');
     }
 
     /*

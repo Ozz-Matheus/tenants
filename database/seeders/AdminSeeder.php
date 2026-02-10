@@ -17,7 +17,7 @@ class AdminSeeder extends Seeder
         $password = config('holdingtec.super_admin.password');
 
         $superAdmin = new User;
-        $superAdmin->name = 'Tenants Admin';
+        $superAdmin->name = 'HoldingTec Admin';
         $superAdmin->email = $email;
         $superAdmin->password = bcrypt($password);
         $superAdmin->save();

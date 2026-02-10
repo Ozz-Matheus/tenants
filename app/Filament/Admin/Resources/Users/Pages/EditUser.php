@@ -5,8 +5,8 @@ namespace App\Filament\Admin\Resources\Users\Pages;
 use App\Enums\RoleEnum;
 use App\Filament\Admin\Resources\Users\UserResource;
 use Filament\Actions\DeleteAction;
-// use Filament\Actions\ForceDeleteAction;
-// use Filament\Actions\RestoreAction;
+use Filament\Actions\ForceDeleteAction;
+use Filament\Actions\RestoreAction;
 use Filament\Resources\Pages\EditRecord;
 
 class EditUser extends EditRecord
@@ -20,9 +20,9 @@ class EditUser extends EditRecord
                 ->visible(function () {
                     return ! $this->record->hasRole(RoleEnum::SUPER_ADMIN);
                 }),
-            // RestoreAction::make(),
-            // ForceDeleteAction::make()
-            //     ->visible(fn ($record): bool => auth()->user()->hasRole(RoleEnum::SUPER_ADMIN) && ! $this->record->hasRole(RoleEnum::SUPER_ADMIN)),
+            RestoreAction::make(),
+            ForceDeleteAction::make()
+                ->visible(fn ($record): bool => auth()->user()->hasRole(RoleEnum::SUPER_ADMIN) && ! $this->record->hasRole(RoleEnum::SUPER_ADMIN)),
         ];
     }
 

@@ -2,6 +2,7 @@
 
 declare(strict_types=1);
 
+use App\Http\Controllers\Tenant\Files\FileServeController;
 use App\Livewire\Auth\ResetPassword;
 use Illuminate\Support\Facades\Route;
 use Stancl\Tenancy\Middleware\InitializeTenancyBySubdomain;
@@ -31,4 +32,7 @@ Route::middleware([
 
     Route::get('/reset-password/{token}', ResetPassword::class)->name('password.reset');
 
+    Route::get('/secure-files/{file}', [FileServeController::class, 'show'])
+        ->name('files.secure.show')
+        ->middleware('signed');
 });

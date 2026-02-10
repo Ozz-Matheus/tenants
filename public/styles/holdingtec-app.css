@@ -1,0 +1,61 @@
+@charset "UTF-8";
+
+.w-full{
+    width: 100%;
+}
+
+.h-screen{
+    height: 100vh;
+}
+.items-center {
+    align-items: center;
+}
+.flex {
+    display: flex;
+}
+.gap-x-2 {
+    -moz-column-gap: .5rem;
+    column-gap: .5rem;
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+.gap-y-8 {
+    row-gap: 2rem;
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+.py-2 {
+    padding-bottom: .5rem;
+    padding-top: .5rem
+}
+.py-3 {
+    padding-bottom: .75rem;
+    padding-top: .75rem
+}
+.pt-2 {
+    padding-top: .5rem
+}
+.pt-3 {
+    padding-top: .75rem
+}
+.pt-6 {
+    padding-top: 1.5rem;
+}
+.border-t {
+    border-top-width: 1px;
+    border-color: #e4e4e7;
+}
+.space-y-4>:not([hidden])~:not([hidden]) {
+    --tw-space-y-reverse: 0;
+    margin-bottom: calc(1rem*var(--tw-space-y-reverse));
+    margin-top: calc(1rem*(1 - var(--tw-space-y-reverse)))
+}
+
+.space-y-6>:not([hidden])~:not([hidden]) {
+    --tw-space-y-reverse: 0;
+    margin-bottom: calc(1.5rem*var(--tw-space-y-reverse));
+    margin-top: calc(1.5rem*(1 - var(--tw-space-y-reverse)))
+}
+.file-viewer small{
+    margin: 0 5px;
+}

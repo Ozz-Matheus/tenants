@@ -11,9 +11,11 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::table('users', function (Blueprint $table) {
-            $table->boolean('active')->default(true)->after('password');
-            $table->softDeletes()->after('remember_token');
+        Schema::create('doc_dispositions', function (Blueprint $table) {
+            $table->id();
+            $table->foreignId('storage_id')->constrained('doc_storages');
+            $table->string('title');
+            $table->timestamps();
         });
     }
 
@@ -22,9 +24,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::table('users', function (Blueprint $table) {
-            $table->dropColumn('active');
-            $table->dropSoftDeletes();
-        });
+        Schema::dropIfExists('doc_dispositions');
     }
 };

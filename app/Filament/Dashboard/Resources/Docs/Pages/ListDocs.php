@@ -1,0 +1,21 @@
+<?php
+
+namespace App\Filament\Dashboard\Resources\Docs\Pages;
+
+use App\Filament\Dashboard\Resources\Docs\DocResource;
+use Filament\Actions\CreateAction;
+use Filament\Resources\Pages\ListRecords;
+use Filament\Support\Icons\Heroicon;
+
+class ListDocs extends ListRecords
+{
+    protected static string $resource = DocResource::class;
+
+    protected function getHeaderActions(): array
+    {
+        return [
+            CreateAction::make()
+                ->icon(Heroicon::PlusCircle),
+        ];
+    }
+}

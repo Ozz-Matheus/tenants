@@ -8,7 +8,7 @@ use Filament\Actions\EditAction;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Columns\ToggleColumn;
 use Filament\Tables\Filters\TernaryFilter;
-// use Filament\Tables\Filters\TrashedFilter;
+use Filament\Tables\Filters\TrashedFilter;
 use Filament\Tables\Table;
 
 class UsersTable
@@ -54,7 +54,7 @@ class UsersTable
             ->filters([
                 TernaryFilter::make('active')
                     ->label(trans('tenant.columns.is_active')),
-                // TrashedFilter::make(),
+                TrashedFilter::make(),
             ])
             ->filtersTriggerAction(
                 fn ($action) => $action->button()

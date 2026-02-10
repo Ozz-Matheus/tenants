@@ -2,9 +2,15 @@
 
 namespace App\Filament\Dashboard\Resources\Users\Schemas;
 
-use Filament\Forms\Components\DateTimePicker;
+use App\Enums\RoleEnum;
+use App\Models\User;
+use Filament\Forms\Components\CheckboxList;
+use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
+use Filament\Forms\Components\Toggle;
+use Filament\Schemas\Components\Section;
 use Filament\Schemas\Schema;
+use Illuminate\Database\Eloquent\Builder;
 
 class UserForm
 {
@@ -12,16 +18,127 @@ class UserForm
     {
         return $schema
             ->components([
-                TextInput::make('name')
-                    ->required(),
-                TextInput::make('email')
-                    ->label('Email address')
-                    ->email()
-                    ->required(),
-                DateTimePicker::make('email_verified_at'),
-                TextInput::make('password')
-                    ->password()
-                    ->required(),
-            ]);
+
+                Section::make()
+                    ->columns(3)
+                    ->schema([
+                        TextInput::make('name')
+                            ->label(__('Name'))
+                            ->required()
+                            ->maxLength(255),
+                        TextInput::make('email')
+                            ->label(__('Email'))
+                            ->email()
+                            ->unique(table: 'users', ignoreRecord: true)
+                            ->required()
+                            ->disabled(fn (?User $record) => $record ? auth()->user()->isProtectedFrom($record) : false)
+                            ->maxLength(255),
+                        TextInput::make('password')
+                            ->label(__('Password'))
+                            ->password()
+                            ->maxLength(255)
+                            ->nullable()
+                            ->dehydrated(fn ($state) => filled($state))
+                            ->required(fn (string $context) => $context === 'create')
+                            ->helperText(
+                                fn (string $context) => $context === 'edit'
+                                    ? __('user.leave_empty_to_keep_password')
+                                    : null
+                            ),
+                        CheckboxList::make('roles')
+                            ->label(__('Roles'))
+                            ->relationship(
+                                name: 'roles',
+                                titleAttribute: 'name',
+                                modifyQueryUsing: fn ($query) => $query
+                                    ->when(! auth()->user()->hasRole(RoleEnum::SUPER_ADMIN), fn ($q) => $q->where('name', '!=', RoleEnum::SUPER_ADMIN))
+                            )
+                            ->bulkToggleable()
+                            ->getOptionLabelFromRecordUsing(fn ($record) => RoleEnum::getLabelFromValue($record->name))
+                            ->disabled(fn (?User $record) => $record ? auth()->user()->isProtectedFrom($record) : false)
+                            ->columnSpanFull()
+                            ->columns(3),
+                    ]),
+
+                Section::make(__('Assignment of Subprocesses and Leadership'))
+                    ->columns(2)
+                    ->schema([
+                        CheckboxList::make('subprocesses')
+                            ->relationship('subprocesses', 'title')
+                            ->label(__('Assigned Sub Processes'))
+                            ->reactive()
+                            ->afterStateUpdated(function ($get, $set, $state, $record) {
+                                if (! $record) {
+                                    return;
+                                }
+
+                                // Subprocesos donde el usuario es líder
+                                $locked = $record->leaderOf->pluck('id')->toArray();
+
+                                // Forzar que siempre estén presentes
+                                $set('subprocesses', array_unique(array_merge($state ?? [], $locked)));
+
+                                // Sincronizar liderazgo
+                                $leaderOf = $get('leaderOf') ?? [];
+                                $set('leaderOf', array_intersect($leaderOf, $get('subprocesses')));
+                            })
+                            ->searchable()
+                            ->bulkToggleable()
+                            ->disabled(fn (?User $record) => $record ? auth()->user()->isProtectedFrom($record) : false)
+                            ->helperText(
+                                fn (string $context) => $context === 'edit'
+                                    ? __('The user cannot be unlinked from the subprocess if he is linked to it as a leader.')
+                                    : null
+                            )->columns(2),
+                        CheckboxList::make('leaderOf')
+                            ->relationship(
+                                name: 'leaderOf',
+                                titleAttribute: 'title',
+                                modifyQueryUsing: function (Builder $query, $get) {
+                                    return $query->whereIn('id', $get('subprocesses'));
+                                }
+                            )
+                            ->reactive()
+                            ->label(__('Leader of'))
+                            ->searchable()
+                            ->bulkToggleable()
+                            ->disabled(fn (?User $record) => $record ? auth()->user()->isProtectedFrom($record) : false)
+                            ->helperText(
+                                fn (string $context) => $context === 'edit'
+                                    ? __('The user will have as leadership options the subprocesses to which they belong.')
+                                    : null
+                            )
+                            ->columns(2),
+                    ]),
+
+                Section::make(__('User headquarters and status'))
+                    ->columns(2)
+                    ->schema([
+                        Toggle::make('view_all_headquarters')
+                            ->label(__('View all headquarters'))
+                            ->disabled(fn (?User $record) => $record ? auth()->user()->isProtectedFrom($record) : false)
+                            ->helperText(__('It allows the user to view the content of all headquarters.'))
+                            ->inline(false),
+                        Toggle::make('interact_with_all_headquarters')
+                            ->label(__('Interact with all headquarters'))
+                            ->disabled(fn (?User $record) => $record ? auth()->user()->isProtectedFrom($record) : false)
+                            ->helperText(__('It allows the user to interact with the content of all headquarters.'))
+                            ->inline(false),
+                        Select::make('headquarter_id')
+                            ->label(__('Headquarters'))
+                            ->relationship('headquarter', 'name')
+                            ->disabled(fn (?User $record) => $record ? auth()->user()->isProtectedFrom($record) : false)
+                            ->native(false)
+                            ->required(),
+                        Toggle::make('active')
+                            ->label(trans('tenant.columns.is_active'))
+                            ->disabled(fn (?User $record) => $record ? auth()->user()->isProtectedFrom($record) : false)
+                            ->helperText(__('user.toggle_user_access'))
+                            ->required()
+                            ->default(true)
+                            ->inline(false),
+                    ]),
+
+            ])->columns(1);
     }
 }

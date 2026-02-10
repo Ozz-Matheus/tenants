@@ -2,6 +2,7 @@
 
 namespace App\Providers\Filament;
 
+use App\Filament\Pages\FileViewer;
 use BezhanSalleh\FilamentShield\FilamentShieldPlugin;
 use Filament\Http\Middleware\Authenticate;
 use Filament\Http\Middleware\AuthenticateSession;
@@ -10,10 +11,11 @@ use Filament\Http\Middleware\DispatchServingFilamentEvent;
 use Filament\Pages\Dashboard;
 use Filament\Panel;
 use Filament\PanelProvider;
+use Filament\Support\Assets\Css;
 use Filament\Support\Colors\Color;
+use Filament\Support\Enums\Width;
 use Filament\Support\Facades\FilamentColor;
 use Filament\Widgets\AccountWidget;
-use Filament\Widgets\FilamentInfoWidget;
 use Illuminate\Cookie\Middleware\AddQueuedCookiesToResponse;
 use Illuminate\Cookie\Middleware\EncryptCookies;
 use Illuminate\Foundation\Http\Middleware\VerifyCsrfToken;
@@ -27,6 +29,7 @@ class DashboardPanelProvider extends PanelProvider
 {
     public function panel(Panel $panel): Panel
     {
+
         FilamentColor::register([
             'indigo' => Color::Indigo,
         ]);
@@ -38,15 +41,28 @@ class DashboardPanelProvider extends PanelProvider
             ->colors([
                 'primary' => Color::Blue,
             ])
+            ->favicon(asset('images/favicon.png'))
+            ->brandLogo(asset('images/logo_claro.svg'))
+            ->darkModeBrandLogo(asset('images/logo_oscuro.svg'))
+            ->brandLogoHeight('3rem')
+            ->sidebarCollapsibleOnDesktop()
+            ->maxContentWidth(Width::Full)
+            ->spa()
+            ->unsavedChangesAlerts()
+            ->readOnlyRelationManagersOnResourceViewPagesByDefault(false)
             ->discoverResources(in: app_path('Filament/Dashboard/Resources'), for: 'App\Filament\Dashboard\Resources')
             ->discoverPages(in: app_path('Filament/Dashboard/Pages'), for: 'App\Filament\Dashboard\Pages')
+            ->discoverClusters(in: app_path('Filament/Dashboard/Clusters'), for: 'App\Filament\Dashboard\Clusters')
             ->pages([
                 Dashboard::class,
+                FileViewer::class,
+            ])
+            ->assets([
+                Css::make('holdingtec-app', asset('styles/holdingtec-app.css')),
             ])
             ->discoverWidgets(in: app_path('Filament/Dashboard/Widgets'), for: 'App\Filament\Dashboard\Widgets')
             ->widgets([
                 AccountWidget::class,
-                FilamentInfoWidget::class,
             ])
             ->middleware([
                 EncryptCookies::class,
@@ -67,10 +83,10 @@ class DashboardPanelProvider extends PanelProvider
             ->plugins([
                 FilamentShieldPlugin::make()
                     ->navigationSort(1)
-                    ->navigationGroup(__('Global Management')),
+                    ->navigationGroup(__('Role Management')),
             ])
             ->authMiddleware([
                 Authenticate::class,
-            ]);
+            ])->databaseNotifications();
     }
 }

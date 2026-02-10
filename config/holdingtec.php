@@ -17,6 +17,15 @@ $pdfMime = ['application/pdf'];
 
 return [
 
+    /*
+    |--------------------------------------------------------------------------
+    | Configuración Central Route
+    |--------------------------------------------------------------------------
+    |
+    | Credenciales predeterminadas para el usuario maestro en cada tenant.
+    |
+    */
+
     'central_domain' => env('CENTRAL_DOMAIN', 'localhost'),
 
     /*
