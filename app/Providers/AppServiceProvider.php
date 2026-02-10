@@ -7,9 +7,12 @@ use App\Observers\TenantObserver;
 use App\Services\TenantStorageInitializer;
 use Filament\Facades\Filament;
 use Illuminate\Support\Facades\Event;
+use Illuminate\Support\Facades\Route;
 use Illuminate\Support\ServiceProvider;
+use Livewire\Livewire;
 use Spatie\Permission\PermissionRegistrar;
 use Stancl\Tenancy\Events\TenancyBootstrapped;
+use Stancl\Tenancy\Middleware\InitializeTenancyBySubdomain;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -26,6 +29,19 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
+        $centralDomains = config('tenancy.central_domains', []);
+
+        if (! in_array(request()->getHost(), $centralDomains)) {
+
+            Livewire::setUpdateRoute(function ($handle) {
+                return Route::post('/livewire/update', $handle)
+                    ->middleware([
+                        'web',
+                        InitializeTenancyBySubdomain::class,
+                    ]);
+            });
+        }
+
         Tenant::observe(TenantObserver::class);
 
         Filament::serving(function () {

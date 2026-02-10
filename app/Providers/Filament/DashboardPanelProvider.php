@@ -2,6 +2,7 @@
 
 namespace App\Providers\Filament;
 
+use App\Http\Middleware\ApplyTenantContext;
 use BezhanSalleh\FilamentShield\FilamentShieldPlugin;
 use Filament\Http\Middleware\Authenticate;
 use Filament\Http\Middleware\AuthenticateSession;
@@ -63,7 +64,11 @@ class DashboardPanelProvider extends PanelProvider
                 'universal',
                 InitializeTenancyBySubdomain::class,
                 PreventAccessFromCentralDomains::class,
+                ApplyTenantContext::class,
             ], isPersistent: true)
+            ->domains(array_map(function ($domain) {
+                return '{tenant}.'.$domain;
+            }, config('tenancy.central_domains')))
             ->plugins([
                 FilamentShieldPlugin::make()
                     ->navigationSort(1)

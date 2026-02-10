@@ -8,16 +8,13 @@ use Illuminate\Support\Facades\Route;
 return Application::configure(basePath: dirname(__DIR__))
     ->withRouting(
         using: function () {
-            $centraldomain = config('tenancy.central_domains');
+            $centralDomains = config('tenancy.central_domains');
 
-            foreach ($centraldomain as $domain) {
-
+            foreach ($centralDomains as $domain) {
                 Route::middleware('web')
                     ->domain($domain)
                     ->group(base_path('routes/web.php'));
             }
-
-            Route::middleware('web')->group(base_path('routes/tenant.php'));
 
         },
 
