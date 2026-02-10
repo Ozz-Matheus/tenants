@@ -42,8 +42,6 @@ class AppServiceProvider extends ServiceProvider
             });
         }
 
-        Tenant::observe(TenantObserver::class);
-
         Filament::serving(function () {
 
             if ($user = auth()->user()) {
@@ -59,6 +57,8 @@ class AppServiceProvider extends ServiceProvider
             }
 
         });
+
+        Tenant::observe(TenantObserver::class);
 
         Event::listen(TenancyBootstrapped::class, function ($event) {
 
