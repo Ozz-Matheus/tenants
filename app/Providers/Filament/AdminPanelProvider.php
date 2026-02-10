@@ -62,6 +62,9 @@ class AdminPanelProvider extends PanelProvider
             ->middleware([
                 'universal',
             ])
+            ->domains([
+                config('holdingtec.central_domain'),
+            ])
             ->plugins([
                 FilamentShieldPlugin::make()
                     ->navigationSort(1)
