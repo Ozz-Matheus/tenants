@@ -3,12 +3,15 @@
 namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
+use App\Enums\RoleEnum;
+use Filament\Models\Contracts\FilamentUser;
+use Filament\Panel;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Spatie\Permission\Traits\HasRoles;
 
-class User extends Authenticatable
+class User extends Authenticatable implements FilamentUser
 {
     /** @use HasFactory<\Database\Factories\UserFactory> */
     use HasFactory, HasRoles, Notifiable;
@@ -45,5 +48,76 @@ class User extends Authenticatable
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
         ];
+    }
+
+    /*
+    |--------------------------------------------------------------------------
+    | Accesores / Métodos útiles
+    |--------------------------------------------------------------------------
+    */
+
+    /**
+     * Determina si el usuario autenticado tiene prohibido modificar
+     * campos críticos de un registro específico (incluyéndose a sí mismo).
+     */
+    public function isProtectedFrom(User $userBeingEdited): bool
+    {
+        // 1. Un usuario no puede modificarse ciertos campos críticos a sí mismo
+        // (Para evitar quitarse el acceso, cambiarse de sede por error, etc.)
+        if ($this->is($userBeingEdited)) {
+            return true;
+        }
+
+        // 2. Si el usuario editado es Super Admin y quien edita no lo es, está protegido.
+        if ($userBeingEdited->hasRole(RoleEnum::SUPER_ADMIN) &&
+            ! $this->hasRole(RoleEnum::SUPER_ADMIN)) {
+            return true;
+        }
+
+        return false;
+    }
+
+    // Metodos para el Acceso.
+
+    public function isActive(): bool
+    {
+        return (bool) $this->active;
+    }
+
+    public function canAccessPanel(Panel $panel): bool
+    {
+        if ($this->hasRole(RoleEnum::SUPER_ADMIN)) {
+            return true;
+        }
+
+        if ($reason = $this->getAccessDenialReason()) {
+
+            Auth::logout();
+            AppNotifier::danger($reason['title'], $reason['message'], true);
+
+            return false;
+
+        }
+
+        return true;
+    }
+
+    private function getAccessDenialReason(): ?array
+    {
+        return match (true) {
+
+            tenant()?->is_active === false => [
+                'title' => __('Workspace Deactivated'),
+                'message' => __('This workspace is currently deactivated...'),
+            ],
+
+            ! $this->isActive() => [
+                'title' => __('Account Deactivated'),
+                'message' => __('Your account has been deactivated...'),
+            ],
+
+            default => null,
+
+        };
     }
 }

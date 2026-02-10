@@ -59,6 +59,9 @@ class AdminPanelProvider extends PanelProvider
                 DisableBladeIconComponents::class,
                 DispatchServingFilamentEvent::class,
             ])
+            ->middleware([
+                'universal',
+            ])
             ->plugins([
                 FilamentShieldPlugin::make()
                     ->navigationSort(1)

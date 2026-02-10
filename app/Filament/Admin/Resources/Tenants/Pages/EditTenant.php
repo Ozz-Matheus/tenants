@@ -20,14 +20,14 @@ class EditTenant extends EditRecord
     {
         return [
             Action::make('open')
-                ->label(trans('filament-tenancy::messages.actions.view'))
+                ->label(trans('tenant.actions.view'))
                 ->icon('heroicon-s-link')
                 ->url(fn ($record) => $record->admin_url)
                 ->openUrlInNewTab(),
 
             DeleteAction::make()
                 ->icon('heroicon-s-trash')
-                ->label(trans('filament-tenancy::messages.actions.delete')),
+                ->label(trans('tenant.actions.delete')),
         ];
     }
 }

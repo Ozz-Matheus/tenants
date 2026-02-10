@@ -16,9 +16,7 @@ return [
      *
      * Only relevant if you're using the domain or subdomain identification middleware.
      */
-    'central_domains' => [
-        'tenants.test',
-    ],
+    'central_domains' => array_filter(array_merge([env('CENTRAL_DOMAIN', '')], explode(',', env('CENTRAL_DOMAINS', '')))),
 
     /**
      * Tenancy bootstrappers are executed when tenancy is initialized.
@@ -28,7 +26,7 @@ return [
      */
     'bootstrappers' => [
         Stancl\Tenancy\Bootstrappers\DatabaseTenancyBootstrapper::class,
-        Stancl\Tenancy\Bootstrappers\CacheTenancyBootstrapper::class,
+        // Stancl\Tenancy\Bootstrappers\CacheTenancyBootstrapper::class,
         Stancl\Tenancy\Bootstrappers\FilesystemTenancyBootstrapper::class,
         Stancl\Tenancy\Bootstrappers\QueueTenancyBootstrapper::class,
         // Stancl\Tenancy\Bootstrappers\RedisTenancyBootstrapper::class, // Note: phpredis is needed
@@ -112,7 +110,7 @@ return [
          */
         'root_override' => [
             // Disks whose roots should be overridden after storage_path() is suffixed.
-            'local' => '%storage_path%/app/',
+            'local' => '%storage_path%/app/private/',
             'public' => '%storage_path%/app/public/',
         ],
 

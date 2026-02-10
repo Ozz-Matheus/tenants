@@ -20,12 +20,13 @@ use Illuminate\Foundation\Http\Middleware\VerifyCsrfToken;
 use Illuminate\Routing\Middleware\SubstituteBindings;
 use Illuminate\Session\Middleware\StartSession;
 use Illuminate\View\Middleware\ShareErrorsFromSession;
+use Stancl\Tenancy\Middleware\InitializeTenancyBySubdomain;
+use Stancl\Tenancy\Middleware\PreventAccessFromCentralDomains;
 
 class DashboardPanelProvider extends PanelProvider
 {
     public function panel(Panel $panel): Panel
     {
-
         FilamentColor::register([
             'indigo' => Color::Indigo,
         ]);
@@ -58,6 +59,11 @@ class DashboardPanelProvider extends PanelProvider
                 DisableBladeIconComponents::class,
                 DispatchServingFilamentEvent::class,
             ])
+            ->middleware([
+                'universal',
+                InitializeTenancyBySubdomain::class,
+                PreventAccessFromCentralDomains::class,
+            ], isPersistent: true)
             ->plugins([
                 FilamentShieldPlugin::make()
                     ->navigationSort(1)

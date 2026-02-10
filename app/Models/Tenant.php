@@ -54,18 +54,4 @@ class Tenant extends BaseTenant implements TenantWithDatabase
             $this->domains->first()?->domain
         ));
     }
-
-    public function getImpersonationUrl(int $userId): string
-    {
-        $token = tenancy()->impersonate($this, $userId, '/admin', 'web');
-
-        // Usamos el helper para obtener la base limpia (sin /admin)
-        $baseUrl = AppHelper::getTenantUrl($this->domains->first()?->domain, '/');
-
-        if (! $baseUrl) {
-            return '#';
-        } // Fallback por si no tiene dominio
-
-        return "{$baseUrl}login/url?token={$token->token}&email=".urlencode($this->email);
-    }
 }
