@@ -22,7 +22,7 @@ class TenantCreatorService
      */
     public static function create(array $data): Tenant
     {
-        // 1. CREACIÓN DEL REGISTRO (Dentro de Transacción)
+        // 1. CREACIÓN DEL REGISTRO
         // Esto es rápido y solo bloquea la BD central el tiempo mínimo necesario.
         $tenant = DB::transaction(function () use ($data) {
 
@@ -162,7 +162,6 @@ class TenantCreatorService
         $subdomain = $tenant->domains->first()->domain;
 
         // 2. Obtenemos el dominio central de la config (ej: 'holdingtec.test')
-        // Usamos la misma config que usas en TenantsTable.php
         $centralDomain = config('holdingtec.central_domain') ?? request()->getHost();
 
         // 3. Construimos el FQDN (Fully Qualified Domain Name) -> ocaso.holdingtec.test
