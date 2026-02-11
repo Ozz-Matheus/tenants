@@ -19,6 +19,9 @@ class CreateTenant extends CreateRecord
 
     protected function handleRecordCreation(array $data): Model
     {
+        // Agregamos el owner
+        $data['owner_by_id'] = auth()->id();
+
         // Detectamos si es importación basada en el Toggle del form
         $this->isLinkingExisting = $data['link_existing_db'] ?? false;
 
@@ -29,7 +32,7 @@ class CreateTenant extends CreateRecord
         }
 
         // FLUJO B: Crear nuevo Tenant
-        // Dejamos que el plugin cree el tenant, database y lance los seeds.
+        // Dejamos que el paquete tenacy cree el tenant, database y lance los seeds.
         $record = parent::handleRecordCreation(collect($data)->except(['domain', 'link_existing_db'])->toArray());
         $record->domains()->create(['domain' => $data['domain']]);
 
@@ -38,22 +41,17 @@ class CreateTenant extends CreateRecord
 
     protected function afterCreate(): void
     {
-        // FLUJO A : Si importamos una DB existente, el Service ya hizo todo el setup. Salimos.
+        // FLUJO A :
+        // Si importamos una DB existente, el Service ya hizo todo el setup. Salimos.
         if ($this->isLinkingExisting) {
             return;
         }
 
-        // FLUJO B: Caso contrario ejecutamos la configuración post-creación manual.
-        // 1. Agregamos el owner
-        DB::table('tenants')
-            ->where('id', $this->record->id)
-            ->update(['owner_by_id' => auth()->id()]);
-
         // 2. Configurar el Super Admin solamente.
         TenantCreatorService::setup(
             $this->record,
-            runMigrations: true,
-            runSeeds: true
+            runMigrations: false,
+            runSeeds: false
         );
     }
 }

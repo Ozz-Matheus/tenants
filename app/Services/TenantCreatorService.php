@@ -6,52 +6,41 @@ use App\Enums\RoleEnum;
 use App\Mail\TenantCredentialsMail;
 use App\Models\Tenant;
 use App\Models\User;
-use Database\Seeders\DatabaseSeeder;
-use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Password;
 use Illuminate\Support\Str;
-use Stancl\Tenancy\Facades\Tenancy;
+use Stancl\Tenancy\Jobs\MigrateDatabase;
+use Stancl\Tenancy\Jobs\SeedDatabase;
 
 class TenantCreatorService
 {
     /**
-     * Flujo completo para crear o importar un Tenant de forma atómica y segura.
+     * Flujo completo para crear o importar un Tenant.
      */
     public static function create(array $data): Tenant
     {
         // 1. CREACIÓN DEL REGISTRO
-        // Esto es rápido y solo bloquea la BD central el tiempo mínimo necesario.
         $tenant = DB::transaction(function () use ($data) {
 
-            // Instanciamos sin guardar todavía
+            // Instanciamos
             $tenant = new Tenant;
 
             if (isset($data['id'])) {
                 $tenant->id = $data['id'];
+                $tenant->created_at = now()->toDateTimeString();
+                $tenant->updated_at = now()->toDateTimeString();
+                $tenant->tenancy_db_name = $data['id'];
             }
 
             // Llenamos datos básicos
-            $tenant->fill(collect($data)->except(['domain'])->toArray());
+            $tenant->fill(collect($data)->except(['domain', 'link_existing_db'])->toArray());
 
             // Guardamos silenciosamente
-            // Esto evita conflictos con el paquete Tomato tenacy
+            // Esto evita conflictos con el paquete tenacy
             $tenant->saveQuietly();
 
-            // Asignamos metadatos directamente
-            // Esto evita conflictos con el paquete Tomato tenacy
-            DB::table('tenants')->where('id', $tenant->id)->update([
-                'owner_by_id' => auth()->id(),
-                'data' => json_encode([
-                    'created_at' => now()->toDateTimeString(),
-                    'updated_at' => now()->toDateTimeString(),
-                    'tenancy_db_name' => $tenant->id,
-                ]),
-            ]);
-
-            // Creamos el sub dominio
             $tenant->domains()->create(['domain' => $data['domain']]);
 
             return $tenant;
@@ -85,48 +74,25 @@ class TenantCreatorService
         bool $runSeeds = true
 
     ): void {
-        try {
-            // ---  Inicializa el contexto del tenant ---
-            Tenancy::initialize($tenant);
 
-            // --- A. MIGRACIONES ---
-            if ($runMigrations) {
+        // --- A. MIGRACIONES ---
+        if ($runMigrations) {
 
-                $migrator = app('migrator');
-                $migrationPath = database_path('migrations/tenant');
+            dispatch_sync(new MigrateDatabase($tenant));
 
-                // Ahora verificamos si existe la db del tenant
-                if (! $migrator->getRepository()->repositoryExists()) {
-                    $migrator->getRepository()->createRepository();
-                }
+        }
 
-                // Ejecutar las migraciones
-                $migrator->run([$migrationPath]);
+        // --- B. SEEDERS ---
+        $tenant->run(function () use ($tenant, $runSeeds) {
+
+            if ($runSeeds) {
+
+                dispatch_sync(new SeedDatabase($tenant));
             }
 
-            // --- B. SEEDERS ---
-            if ($runSeeds && class_exists(DatabaseSeeder::class)) {
-                // Silenciamos errores de seeders no críticos para no abortar el proceso
-                try {
-                    app(DatabaseSeeder::class)->__invoke();
-                } catch (\Throwable $e) {
-                    Log::error("Seeder error en tenant {$tenant->id}: ".$e->getMessage());
-                }
-            }
-
-            // --- C. CREACIÓN DE USUARIOS ---
             self::createSuperAdmin($tenant);
 
-        } catch (\Throwable $e) {
-
-            // Loguear error crítico y relanzar para rollback de transacción
-            Log::critical("Fallo crítico en setup de Tenant {$tenant->id}: {$e->getMessage()}");
-
-            throw $e; // Re-lanzamos para que Filament sepa que falló
-        } finally {
-            // Limpia el contexto del tenant
-            Tenancy::end();
-        }
+        });
     }
 
     /**
@@ -140,14 +106,12 @@ class TenantCreatorService
         // Determina si se debe usar la contraseña del .env (solo en local y si existe)
         $useEnvPassword = app()->isLocal() && ! empty($envPassword);
 
-        $superAdminPass = $useEnvPassword
-            ? $envPassword
-            : Str::random(16);
+        $superAdminPass = $useEnvPassword ? $envPassword : Str::random(16);
 
         $superAdmin = User::updateOrCreate(
             ['email' => $superAdminMail],
             [
-                'name' => 'HoldingTec SuperAdmin',
+                'name' => 'Tenant Admin',
                 'password' => bcrypt($superAdminPass),
                 'email_verified_at' => now(),
             ]
@@ -174,7 +138,7 @@ class TenantCreatorService
 
         // En producción: siempre envía el correo.
         // En local: solo si NO hay contraseña definida en el .env.
-        if (App::isProduction() || (App::isLocal() && empty($envPassword))) {
+        if (app()->isProduction() || (app()->isLocal() && empty($envPassword))) {
             try {
                 Mail::to($superAdminMail)->send(
                     new TenantCredentialsMail($tenant->name, $resetUrl)
