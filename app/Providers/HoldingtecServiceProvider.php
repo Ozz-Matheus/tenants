@@ -29,7 +29,7 @@ class HoldingtecServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        //$this->configureLivewireTenancy();
+        $this->configureLivewireTenancy();
         $this->configureTenancyObserversAndEvents();
         $this->configureFilamentAssets();
     }
@@ -37,20 +37,20 @@ class HoldingtecServiceProvider extends ServiceProvider
     /**
      * Asegura que Livewire respete el contexto del Tenant en sus peticiones de actualización.
      */
-    // private function configureLivewireTenancy(): void
-    // {
-    //     $centralDomains = config('tenancy.central_domains', []);
+    private function configureLivewireTenancy(): void
+    {
+        $centralDomains = config('tenancy.central_domains', []);
 
-    //     if (! in_array(request()->getHost(), $centralDomains)) {
-    //         Livewire::setUpdateRoute(function ($handle) {
-    //             return Route::post('/livewire/update', $handle)
-    //                 ->middleware([
-    //                     'web',
-    //                     InitializeTenancyBySubdomain::class,
-    //                 ]);
-    //         });
-    //     }
-    // }
+        if (! in_array(request()->getHost(), $centralDomains)) {
+            Livewire::setUpdateRoute(function ($handle) {
+                return Route::post('/livewire/update', $handle)
+                    ->middleware([
+                        'web',
+                        InitializeTenancyBySubdomain::class,
+                    ]);
+            });
+        }
+    }
 
     /**
      * Registra los observadores de modelos y eventos de Stancl/Tenancy.

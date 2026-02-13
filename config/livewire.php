@@ -148,20 +148,6 @@ return [
 
     /*
     |---------------------------------------------------------------------------
-    | Update Route Configuration
-    |---------------------------------------------------------------------------
-    | Esto es lo que falta para que el Login (y todo Livewire) funcione en subdominios
-    */
-    'update_route' => [
-        'middleware' => [
-            'web',
-            \Stancl\Tenancy\Middleware\InitializeTenancyBySubdomain::class,
-            \Stancl\Tenancy\Middleware\PreventAccessFromCentralDomains::class,
-        ],
-    ],
-
-    /*
-    |---------------------------------------------------------------------------
     | Render On Redirect
     |---------------------------------------------------------------------------
     |
