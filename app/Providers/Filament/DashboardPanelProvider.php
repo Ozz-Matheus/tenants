@@ -23,7 +23,6 @@ use Illuminate\Session\Middleware\StartSession;
 use Illuminate\View\Middleware\ShareErrorsFromSession;
 use Stancl\Tenancy\Middleware\InitializeTenancyBySubdomain;
 use Stancl\Tenancy\Middleware\PreventAccessFromCentralDomains;
-use Tapp\FilamentAuditing\FilamentAuditingPlugin;
 
 class DashboardPanelProvider extends PanelProvider
 {
@@ -84,7 +83,6 @@ class DashboardPanelProvider extends PanelProvider
                 FilamentShieldPlugin::make()
                     ->navigationSort(1)
                     ->navigationGroup(__('Role Management')),
-                FilamentAuditingPlugin::make(),
             ])
             ->authMiddleware([
                 Authenticate::class,
