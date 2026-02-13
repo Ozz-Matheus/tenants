@@ -8,6 +8,7 @@ use App\Support\AppNotifier;
 use App\Traits\HasUserLogic;
 use Filament\Models\Contracts\FilamentUser;
 use Filament\Panel;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -101,6 +102,19 @@ class User extends Authenticatable implements FilamentUser
     public function accessToAdditionalUsers()
     {
         return $this->belongsToMany(Doc::class, 'docs_has_confidential_users', 'doc_id', 'user_id');
+    }
+
+    /*
+    |--------------------------------------------------------------------------
+    | Scopes (Filtros Reutilizables)
+    |--------------------------------------------------------------------------
+    */
+
+    public function scopeWithoutSuperAdmin(Builder $query): void
+    {
+        $query->whereDoesntHave('roles', function ($q) {
+            $q->where('name', RoleEnum::SUPER_ADMIN);
+        });
     }
 
     /*

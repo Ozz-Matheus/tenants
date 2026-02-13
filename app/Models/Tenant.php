@@ -22,7 +22,7 @@ class Tenant extends BaseTenant implements TenantWithDatabase
     ];
 
     protected $casts = [
-        'data' => 'json',
+        'data' => 'array',
         'is_active' => 'boolean',
     ];
 

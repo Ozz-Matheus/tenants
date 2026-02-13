@@ -5,6 +5,7 @@ namespace App\Services;
 use App\Enums\StatusEnum;
 use App\Models\Doc;
 use App\Models\DocVersion;
+use App\Support\AppNotifier;
 use App\Traits\HasVersioning;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
@@ -91,12 +92,20 @@ class VersionService
 
     public function updateConfidentiality(Doc $record, array $data)
     {
+        try {
+            $record->update([
+                'confidential' => $data['confidential'],
+            ]);
 
-        $record->update([
-            'confidential' => $data['confidential'],
-        ]);
+            $record->accessToAdditionalUsers()->sync($data['users'] ?? []);
 
-        $record->accessToAdditionalUsers()->sync($data['users'] ?? []);
+            AppNotifier::success(__('Successful user update'));
 
+        } catch (\Throwable $e) {
+
+            AppNotifier::danger(__('An error occurred while updating the user.'));
+
+            report($e);
+        }
     }
 }

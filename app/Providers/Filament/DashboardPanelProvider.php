@@ -11,7 +11,6 @@ use Filament\Http\Middleware\DispatchServingFilamentEvent;
 use Filament\Pages\Dashboard;
 use Filament\Panel;
 use Filament\PanelProvider;
-use Filament\Support\Assets\Css;
 use Filament\Support\Colors\Color;
 use Filament\Support\Enums\Width;
 use Filament\Support\Facades\FilamentColor;
@@ -24,6 +23,7 @@ use Illuminate\Session\Middleware\StartSession;
 use Illuminate\View\Middleware\ShareErrorsFromSession;
 use Stancl\Tenancy\Middleware\InitializeTenancyBySubdomain;
 use Stancl\Tenancy\Middleware\PreventAccessFromCentralDomains;
+use Tapp\FilamentAuditing\FilamentAuditingPlugin;
 
 class DashboardPanelProvider extends PanelProvider
 {
@@ -48,6 +48,9 @@ class DashboardPanelProvider extends PanelProvider
             ->sidebarCollapsibleOnDesktop()
             ->maxContentWidth(Width::Full)
             ->spa()
+            ->spaUrlExceptions([
+                '*/secure-files/*',
+            ])
             ->unsavedChangesAlerts()
             ->readOnlyRelationManagersOnResourceViewPagesByDefault(false)
             ->discoverResources(in: app_path('Filament/Dashboard/Resources'), for: 'App\Filament\Dashboard\Resources')
@@ -56,9 +59,6 @@ class DashboardPanelProvider extends PanelProvider
             ->pages([
                 Dashboard::class,
                 FileViewer::class,
-            ])
-            ->assets([
-                Css::make('holdingtec-app', asset('styles/holdingtec-app.css')),
             ])
             ->discoverWidgets(in: app_path('Filament/Dashboard/Widgets'), for: 'App\Filament\Dashboard\Widgets')
             ->widgets([
@@ -84,6 +84,7 @@ class DashboardPanelProvider extends PanelProvider
                 FilamentShieldPlugin::make()
                     ->navigationSort(1)
                     ->navigationGroup(__('Role Management')),
+                FilamentAuditingPlugin::make(),
             ])
             ->authMiddleware([
                 Authenticate::class,

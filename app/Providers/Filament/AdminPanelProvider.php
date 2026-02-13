@@ -35,7 +35,7 @@ class AdminPanelProvider extends PanelProvider
             ->path('admin')
             ->login()
             ->colors([
-                'primary' => Color::Green,
+                'primary' => Color::Indigo,
             ])
             ->favicon(asset('images/favicon.png'))
             ->brandLogo(asset('images/logo_claro.svg'))

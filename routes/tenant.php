@@ -35,4 +35,5 @@ Route::middleware([
     Route::get('/secure-files/{file}', [FileServeController::class, 'show'])
         ->name('files.secure.show')
         ->middleware('signed');
+
 });

@@ -10,12 +10,10 @@
     <form wire:submit="store" class="space-y-6">
 
         {{ $this->form }}
-        <div class="noUi-pips-horizontal">
-            <div class="CodeMirror-lines">
-                <x-filament::button type="submit" class="w-full" color="info">
-                    {{ $this->getHeading() }}
-                </x-filament::button>
-            </div>
-        </div>
+
+        <x-filament::button type="submit" class="w-full">
+            {{ $this->getHeading() }}
+        </x-filament::button>
+
     </form>
 </x-filament-panels::page.simple>

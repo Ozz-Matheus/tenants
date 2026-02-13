@@ -38,7 +38,12 @@ return [
     */
     'super_admin' => [
         'email' => env('SUPER_ADMIN_EMAIL', 'admin@holdingtec.app'),
-        'password' => env('SUPER_ADMIN_PASSWORD', 'password'),
+        'password' => env('SUPER_ADMIN_PASSWORD', 'adminpass'),
+    ],
+
+    'admin' => [
+        'email' => env('ADMIN_EMAIL', 'soporte@holdingtec.app'),
+        'password' => env('ADMIN_PASSWORD'),
     ],
 
     /*

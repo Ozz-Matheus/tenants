@@ -210,6 +210,13 @@ class FileViewer extends Page implements HasTable
 
             $this->checkAndUpdateVersionStatus($record, $status);
 
+            // 1. Refrescamos el modelo principal ($this->file) y su relación (fileable/version)
+            $this->file->refresh();
+            $this->file->load('fileable');
+
+            // 2. Actualizamos la propiedad pública que usa el Blade
+            $this->status = $this->file->fileable->status;
+
             AppNotifier::success(__('Decision saved successfully'));
         }
     }

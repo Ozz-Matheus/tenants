@@ -9,6 +9,7 @@ use Filament\Forms\Components\Toggle;
 use Filament\Schemas\Components\Group;
 use Filament\Schemas\Components\Section;
 use Filament\Schemas\Schema;
+use Illuminate\Database\Eloquent\Builder;
 
 class DocForm
 {
@@ -110,7 +111,11 @@ class DocForm
                                     ->reactive(),
                                 Select::make('accessToAdditionalUsers')
                                     ->label(__('Access to additional users'))
-                                    ->relationship('accessToAdditionalUsers', 'name')
+                                    ->relationship(
+                                        name: 'accessToAdditionalUsers',
+                                        titleAttribute: 'name',
+                                        modifyQueryUsing: fn (Builder $query) => $query->withoutSuperAdmin()
+                                    )
                                     ->multiple()
                                     ->searchable()
                                     ->preload()

@@ -5,7 +5,6 @@ namespace App\Filament\Dashboard\Resources\Docs\Tables;
 use App\Enums\RoleEnum;
 use App\Enums\StatusEnum;
 use App\Models\Doc;
-use App\Models\User;
 use App\Services\VersionService;
 use Filament\Actions\Action;
 use Filament\Actions\ActionGroup;
@@ -165,10 +164,13 @@ class DocsTable
                                     ->columnSpanFull()
                                     ->reactive(),
 
-                                Select::make('users')
+                                Select::make('accessToAdditionalUsers')
                                     ->label(__('Access to additional users'))
-                                    ->options(User::pluck('name', 'id'))
-                                    ->default($record?->accessToAdditionalUsers?->pluck('id')->toArray())
+                                    ->relationship(
+                                        name: 'accessToAdditionalUsers',
+                                        titleAttribute: 'name',
+                                        modifyQueryUsing: fn ($query) => $query->withoutSuperAdmin()
+                                    )
                                     ->multiple()
                                     ->searchable()
                                     ->preload()

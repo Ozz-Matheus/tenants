@@ -2,9 +2,11 @@
 
 namespace App\Livewire\Auth;
 
+use Filament\Facades\Filament;
 use Filament\Forms\Components\TextInput;
 use Filament\Pages\SimplePage;
 use Filament\Schemas\Schema;
+use Filament\Support\Facades\FilamentColor;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Password;
 use Illuminate\Support\Str;
@@ -38,6 +40,9 @@ class ResetPassword extends SimplePage
         $this->form->fill([
             'email' => $this->email,
         ]);
+
+        $panelColors = Filament::getPanel('dashboard')->getColors();
+        FilamentColor::register($panelColors);
     }
 
     public function form(Schema $schema): Schema
