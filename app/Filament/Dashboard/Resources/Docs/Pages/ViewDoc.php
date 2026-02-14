@@ -23,7 +23,7 @@ class ViewDoc extends ViewRecord
     {
         return [
             Action::make('back')
-                ->label(__('Return'))
+                ->label(__('Back'))
                 ->url(fn (): string => DocResource::getUrl('index'))
                 ->icon(Heroicon::ArrowLeft)
                 ->color('gray'),

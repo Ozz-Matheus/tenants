@@ -66,8 +66,8 @@ class FileViewer extends Page implements HasTable
             if (! $this->doc->isAccessibleBy($user)) {
 
                 AppNotifier::danger(
-                    __('Document'),
-                    __('You do not have permission to view this document.'),
+                    __('doc.model_label'),
+                    __('doc.permission_denied'),
                     true
                 );
 
@@ -87,15 +87,15 @@ class FileViewer extends Page implements HasTable
                     // Filtramos solo si el archivo actual es una versión
                     ->where('version_id', $this->file->fileable_type === DocVersion::class ? $this->file->fileable_id : 0)
             )
-            ->heading(__('Decision History'))
+            ->heading(__('doc.decision_history'))
             ->columns([
                 TextColumn::make('user.name')
-                    ->label(__('Leader'))
+                    ->label(__('doc.Leader'))
                     ->sortable()
                     ->searchable(),
 
                 TextColumn::make('status')
-                    ->label(__('Decision'))
+                    ->label(__('doc.decision'))
                     ->badge(),
 
                 TextColumn::make('comment')
@@ -156,7 +156,7 @@ class FileViewer extends Page implements HasTable
     {
         return [
             Action::make('back')
-                ->label(__('Return'))
+                ->label(__('Back'))
                 ->url(fn (): string => $this->doc ? DocResource::getUrl('versions', ['record' => $this->doc]) : back()->getTargetUrl())
                 ->icon(Heroicon::ArrowLeft)
                 ->color('gray'),
@@ -217,7 +217,7 @@ class FileViewer extends Page implements HasTable
             // 2. Actualizamos la propiedad pública que usa el Blade
             $this->status = $this->file->fileable->status;
 
-            AppNotifier::success(__('Decision saved successfully'));
+            AppNotifier::success(__('doc.decision_saved'));
         }
     }
 

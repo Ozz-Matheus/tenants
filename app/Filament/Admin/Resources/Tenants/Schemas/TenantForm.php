@@ -23,7 +23,7 @@ class TenantForm
                     ->schema([
 
                         Toggle::make('link_existing_db')
-                            ->label(__('Link Existing Database'))
+                            ->label(__('tenant.link_existing_database'))
                             ->default(true)
                             ->columnSpanFull()
                             ->live()

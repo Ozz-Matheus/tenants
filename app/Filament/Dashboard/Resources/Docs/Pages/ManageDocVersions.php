@@ -37,12 +37,12 @@ class ManageDocVersions extends ManageRelatedRecords
 
     public function getTitle(): string
     {
-        return __('Version History');
+        return __('doc.versions.model_label');
     }
 
     public static function getNavigationLabel(): string
     {
-        return __('Versions');
+        return __('doc.versions.plural_model_label');
     }
 
     protected function getHeaderActions(): array
@@ -56,7 +56,7 @@ class ManageDocVersions extends ManageRelatedRecords
                 ->color('gray'),
 
             CreateAction::make()
-                ->label(__('New Version'))
+                ->label(__('doc.versions.actions.create'))
                 ->modalHeading() // Acá se le puede poner el titulo que se quiera al modal.
                 ->createAnother(false)
                 ->icon(Heroicon::DocumentPlus)
@@ -68,7 +68,7 @@ class ManageDocVersions extends ManageRelatedRecords
                         ->storeFileNamesIn('original_file_name')
                         ->required(),
                     Select::make('leads')
-                        ->label(__('leads'))
+                        ->label(__('doc.leads'))
                         ->required()
                         ->multiple()
                         ->searchable()
@@ -89,8 +89,8 @@ class ManageDocVersions extends ManageRelatedRecords
 
                     if (! auth()->user()->canAccessSubProcess($this->record->subprocess_id)) {
                         AppNotifier::danger(
-                            __('Document'),
-                            __('Not authorized to access this subprocess.'),
+                            __('doc.model_label'),
+                            __('doc.unauthorized_subprocess'),
                             true
                         );
                         $action->halt();
@@ -99,7 +99,7 @@ class ManageDocVersions extends ManageRelatedRecords
                     app(VersionService::class)->createVersion($this->record, $data);
                 }),
             Action::make('back')
-                ->label(__('Return'))
+                ->label(__('Back'))
                 ->url(fn (): string => DocResource::getUrl('view', ['record' => $this->record]))
                 ->icon(Heroicon::ArrowLeft)
                 ->color('gray'),
@@ -127,8 +127,7 @@ class ManageDocVersions extends ManageRelatedRecords
                 TextColumn::make('file.readable_mime_type')
                     ->label(__('Type')),
                 TextColumn::make('file.readable_size')
-                    ->label(__('Size'))
-                    ->sortable(),
+                    ->label(__('Size')),
                 TextColumn::make('status')
                     ->label(__('Status'))
                     ->badge()
@@ -202,7 +201,7 @@ class ManageDocVersions extends ManageRelatedRecords
                             app(VersionStatusService::class)->pending($record);
 
                             AppNotifier::success(
-                                __('Version successfully ').StatusEnum::PENDING->getLabel()
+                                __('doc.versions.status_changed_to', ['status' => StatusEnum::PENDING->getLabel()])
                             );
                         })
                         ->visible(function ($record) {

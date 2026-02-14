@@ -56,7 +56,7 @@ class DocCreatedNotice extends Notification
     {
         return FilamentNotification::make()
             ->title($this->doc->title)
-            ->body(__('Created a new record!'))
+            ->body(__('New document created'))
             ->icon('heroicon-o-document-text')
             ->color('primary')
             ->status('primary')

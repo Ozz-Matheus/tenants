@@ -60,12 +60,12 @@ class UserForm
                             ->columns(3),
                     ]),
 
-                Section::make(__('Assignment of Subprocesses and Leadership'))
+                Section::make(__('user.assignment_section'))
                     ->columns(2)
                     ->schema([
                         CheckboxList::make('subprocesses')
                             ->relationship('subprocesses', 'title')
-                            ->label(__('Assigned Sub Processes'))
+                            ->label(__('user.assigned_subprocesses'))
                             ->reactive()
                             ->afterStateUpdated(function ($get, $set, $state, $record) {
                                 if (! $record) {
@@ -87,7 +87,7 @@ class UserForm
                             ->disabled(fn (?User $record) => $record ? auth()->user()->isProtectedFrom($record) : false)
                             ->helperText(
                                 fn (string $context) => $context === 'edit'
-                                    ? __('The user cannot be unlinked from the subprocess if he is linked to it as a leader.')
+                                    ? __('user.unlink_leader_warning')
                                     : null
                             )->columns(2),
                         CheckboxList::make('leaderOf')
@@ -99,33 +99,33 @@ class UserForm
                                 }
                             )
                             ->reactive()
-                            ->label(__('Leader of'))
+                            ->label(__('user.leader_of'))
                             ->searchable()
                             ->bulkToggleable()
                             ->disabled(fn (?User $record) => $record ? auth()->user()->isProtectedFrom($record) : false)
                             ->helperText(
                                 fn (string $context) => $context === 'edit'
-                                    ? __('The user will have as leadership options the subprocesses to which they belong.')
+                                    ? __('user.leadership_options_help')
                                     : null
                             )
                             ->columns(2),
                     ]),
 
-                Section::make(__('User headquarters and status'))
+                Section::make(__('user.headquarters_status_section'))
                     ->columns(2)
                     ->schema([
                         Toggle::make('view_all_headquarters')
-                            ->label(__('View all headquarters'))
+                            ->label(__('user.view_all_headquarters'))
                             ->disabled(fn (?User $record) => $record ? auth()->user()->isProtectedFrom($record) : false)
                             ->helperText(__('It allows the user to view the content of all headquarters.'))
                             ->inline(false),
                         Toggle::make('interact_with_all_headquarters')
-                            ->label(__('Interact with all headquarters'))
+                            ->label(__('user.interact_all_headquarters'))
                             ->disabled(fn (?User $record) => $record ? auth()->user()->isProtectedFrom($record) : false)
-                            ->helperText(__('It allows the user to interact with the content of all headquarters.'))
+                            ->helperText(__('user.interact_all_help'))
                             ->inline(false),
                         Select::make('headquarter_id')
-                            ->label(__('Headquarters'))
+                            ->label(__('headquarter.plural_model_label'))
                             ->relationship('headquarter', 'name')
                             ->disabled(fn (?User $record) => $record ? auth()->user()->isProtectedFrom($record) : false)
                             ->native(false)

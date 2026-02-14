@@ -21,7 +21,7 @@ class TenantsTable
             ->modifyQueryUsing(fn (Builder $query) => $query->with(['domains', 'ownerBy']))
             ->columns([
                 TextColumn::make('id')
-                    ->label(__('Identifier'))
+                    ->label(__('tenant.identifier'))
                     ->copyable()
                     ->copyMessage(__('Copied to clipboard'))
                     ->toggleable(isToggledHiddenByDefault: true)

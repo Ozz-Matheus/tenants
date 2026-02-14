@@ -6,7 +6,7 @@ use App\Filament\Dashboard\Resources\Audit\Pages\ListAudits;
 use App\Filament\Dashboard\Resources\Audit\Pages\ViewAudit;
 use App\Filament\Dashboard\Resources\Audit\Schemas\AuditInfolist;
 use App\Filament\Dashboard\Resources\Audit\Tables\AuditsTable;
-use App\Models\AuditLog;
+use App\Models\Audit;
 use BackedEnum;
 use Filament\Resources\Resource;
 use Filament\Schemas\Schema;
@@ -15,7 +15,7 @@ use Filament\Tables\Table;
 
 class AuditResource extends Resource
 {
-    protected static ?string $model = AuditLog::class;
+    protected static ?string $model = Audit::class;
 
     protected static string|BackedEnum|null $navigationIcon = Heroicon::Cog8Tooth;
 

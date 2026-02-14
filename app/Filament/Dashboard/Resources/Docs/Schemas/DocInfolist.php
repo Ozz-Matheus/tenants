@@ -19,7 +19,7 @@ class DocInfolist
                     Section::make(__('Document Identification'))
                         ->schema([
                             TextEntry::make('classification_code')
-                                ->label(__('Classification code'))
+                                ->label(__('doc.classification_code'))
                                 ->weight('bold')
                                 ->copyable(),
                             TextEntry::make('title')
@@ -29,7 +29,7 @@ class DocInfolist
                                 ->label(__('Doc type'))
                                 ->badge(),
                             IconEntry::make('confidential')
-                                ->label(__('Confidential'))
+                                ->label(__('doc.confidential'))
                                 ->boolean()
                                 ->trueColor('danger')
                                 ->falseColor('gray'),
@@ -45,7 +45,7 @@ class DocInfolist
                                 ->label(__('Sub process'))
                                 ->icon('heroicon-m-arrow-right-circle'),
                             TextEntry::make('headquarter.name')
-                                ->label(__('Headquarters'))
+                                ->label(__('headquarter.model_label'))
                                 ->icon('heroicon-m-building-office'),
                         ])->columns(3),
                 ])->columnSpan(2),

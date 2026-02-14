@@ -8,6 +8,7 @@ use App\Services\TenantStorageInitializer;
 use Filament\Support\Assets\Css;
 use Filament\Support\Facades\FilamentAsset;
 use Illuminate\Support\Facades\Event;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\ServiceProvider;
 use Livewire\Livewire;
@@ -32,6 +33,11 @@ class HoldingtecServiceProvider extends ServiceProvider
         $this->configureLivewireTenancy();
         $this->configureTenancyObserversAndEvents();
         $this->configureFilamentAssets();
+
+        Gate::define('restoreAudit', function ($user, $record = null) {
+            return true;
+        });
+
     }
 
     /**

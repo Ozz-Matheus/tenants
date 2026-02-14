@@ -23,8 +23,8 @@ class Headquarter extends Model
             if ($hq->users()->exists()) {
 
                 AppNotifier::danger(
-                    __('Headquarter'),
-                    __('This Headquarter has assigned users and cannot be deleted.'),
+                    __('headquarter.model_label'),
+                    __('reassign_before_delete'),
                 );
 
                 throw new Halt;

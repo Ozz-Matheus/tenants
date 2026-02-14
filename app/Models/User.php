@@ -174,13 +174,13 @@ class User extends Authenticatable implements FilamentUser
         return match (true) {
 
             tenant()?->is_active === false => [
-                'title' => __('Workspace Deactivated'),
-                'message' => __('This workspace is currently deactivated...'),
+                'title' => __('tenant.workspace_deactivated'),
+                'message' => __('tenant.workspace_deactivated_description'),
             ],
 
             ! $this->isActive() => [
-                'title' => __('Account Deactivated'),
-                'message' => __('Your account has been deactivated...'),
+                'title' => __('user.account_deactivated'),
+                'message' => __('user.account_deactivated_description'),
             ],
 
             default => null,

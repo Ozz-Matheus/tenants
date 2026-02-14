@@ -25,7 +25,7 @@ class DocForm
                             ->columns(2)
                             ->schema([
                                 Select::make('headquarter_id')
-                                    ->label(__('Headquarter'))
+                                    ->label(__('headquarter.model_label'))
                                     ->relationship('headquarter', 'name')
                                     ->native(false)
                                     ->columnSpanFull()
@@ -104,13 +104,13 @@ class DocForm
                         Section::make()
                             ->schema([
                                 Toggle::make('confidential')
-                                    ->label(__('Confidential'))
+                                    ->label(__('doc.confidential'))
                                     ->inline(false)
                                     ->afterStateUpdated(fn ($set) => $set('accessToAdditionalUsers', null))
                                     ->columnSpanFull()
                                     ->reactive(),
                                 Select::make('accessToAdditionalUsers')
-                                    ->label(__('Access to additional users'))
+                                    ->label(__('doc.access_additional_users'))
                                     ->relationship(
                                         name: 'accessToAdditionalUsers',
                                         titleAttribute: 'name',

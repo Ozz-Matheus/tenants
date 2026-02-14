@@ -14,7 +14,7 @@ class ExistingTenantDatabase implements ValidationRule
     public function validate(string $attribute, mixed $value, Closure $fail): void
     {
         // El mensaje único
-        $errorMessage = "La base de datos '{$value}' no existe o no está autorizada. Verifique con soporte."; // 🗣️
+        $errorMessage = __('tenant.database_not_found_or_unauthorized', ['value' => $value]);
 
         // 1. LISTA PRINCIPAL : Bases de datos del sistema y la Central
         $centralDb = config('database.connections.mysql.database');

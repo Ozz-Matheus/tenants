@@ -99,11 +99,11 @@ class VersionService
 
             $record->accessToAdditionalUsers()->sync($data['users'] ?? []);
 
-            AppNotifier::success(__('Successful user update'));
+            AppNotifier::success(__('user_update_success'));
 
         } catch (\Throwable $e) {
 
-            AppNotifier::danger(__('An error occurred while updating the user.'));
+            AppNotifier::danger(__('user_update_error'));
 
             report($e);
         }

@@ -33,17 +33,17 @@ class DocResource extends Resource
 
     public static function getModelLabel(): string
     {
-        return __('Document');
+        return __('doc.model_label');
     }
 
     public static function getPluralModelLabel(): string
     {
-        return __('Documents');
+        return __('doc.plural_model_label');
     }
 
     public static function getNavigationLabel(): string
     {
-        return __('Documents');
+        return __('doc.plural_model_label');
     }
 
     protected static ?SubNavigationPosition $subNavigationPosition = SubNavigationPosition::Top;

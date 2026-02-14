@@ -33,7 +33,7 @@ class DocsTable
         return $table
             ->columns([
                 TextColumn::make('classification_code')
-                    ->label(__('Classification code'))
+                    ->label(__('doc.classification_code'))
                     ->limit(30)
                     ->tooltip(fn ($record) => $record->classification_code)
                     ->copyable()
@@ -57,13 +57,13 @@ class DocsTable
                     ->badge()
                     ->placeholder('-'),
                 TextColumn::make('latestVersion.version')
-                    ->label(__('Version'))
+                    ->label(__('doc.version'))
                     ->sortable()
                     ->placeholder('-'),
                 TextColumn::make('confidential')
-                    ->label(__('Confidential'))
+                    ->label(__('doc.confidential'))
                     ->badge()
-                    ->formatStateUsing(fn ($state) => (bool) $state ? __('Private') : __('Public'))
+                    ->formatStateUsing(fn ($state) => (bool) $state ? __('doc.private') : __('doc.public'))
                     ->color(fn ($state) => (bool) $state ? 'warning' : 'success'),
                 TextColumn::make('created_at')
                     ->label(__('Created at'))
@@ -119,7 +119,7 @@ class DocsTable
                     ->falseLabel(__('Public'))
                     ->native(false),
                 SelectFilter::make('headquarter_id')
-                    ->label(__('Headquarters'))
+                    ->label(__('headquarter.model_label'))
                     ->relationship('headquarter', 'name')
                     ->native(false)
                     ->visible(fn () => auth()->user()->view_all_headquarters === (bool) true),
@@ -146,7 +146,7 @@ class DocsTable
                 ActionGroup::make([
 
                     Action::make('update_additional_users')
-                        ->label(__('Update additional users'))
+                        ->label(__('doc.update_additional_users'))
                         ->icon('heroicon-o-arrow-path')
                         ->color('primary')
                         ->schema(function ($record) {
@@ -165,7 +165,7 @@ class DocsTable
                                     ->reactive(),
 
                                 Select::make('accessToAdditionalUsers')
-                                    ->label(__('Access to additional users'))
+                                    ->label(__('doc.access_additional_users'))
                                     ->relationship(
                                         name: 'accessToAdditionalUsers',
                                         titleAttribute: 'name',
@@ -186,7 +186,7 @@ class DocsTable
                     RestoreAction::make(),      // Recupera de papelera
                     ForceDeleteAction::make()
                         ->visible(fn ($record): bool => auth()->user()->hasRole(RoleEnum::SUPER_ADMIN)), // Borrado físico permanente
-                ])->color('primary')->link()->label(false)->tooltip('Actions'),
+                ])->color('primary')->link()->label(false)->tooltip(__('Actions')),
             ])
             ->toolbarActions([
                 BulkActionGroup::make([

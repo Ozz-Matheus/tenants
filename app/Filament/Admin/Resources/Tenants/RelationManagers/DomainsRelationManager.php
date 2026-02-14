@@ -27,7 +27,7 @@ class DomainsRelationManager extends RelationManager
                     ->required()
                     ->label(trans('tenant.domains.columns.domain'))
                     ->rule(new ValidSubdomain)
-                    ->helperText(__('Only lowercase letters, numbers and hyphens (in: my-company)'))
+                    ->helperText(__('tenant.only_lowercase_allowed'))
                     ->prefix(request()->getScheme().'://')
                     ->suffix('.'.config('holdingtec.central_domain'))
                     ->maxLength(63),
