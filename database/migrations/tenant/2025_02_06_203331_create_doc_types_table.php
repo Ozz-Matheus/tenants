@@ -13,8 +13,7 @@ return new class extends Migration
     {
         Schema::create('doc_types', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
-            $table->string('label');
+            $table->string('title');
             $table->string('acronym')->unique();
             $table->timestamps();
         });

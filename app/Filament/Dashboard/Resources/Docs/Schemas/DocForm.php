@@ -2,20 +2,22 @@
 
 namespace App\Filament\Dashboard\Resources\Docs\Schemas;
 
-use App\Models\DocType;
+use App\Enums\DocStorageEnum;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Toggle;
 use Filament\Schemas\Components\Group;
+use Filament\Schemas\Components\Icon;
 use Filament\Schemas\Components\Section;
 use Filament\Schemas\Schema;
+use Filament\Support\Icons\Heroicon;
 use Illuminate\Database\Eloquent\Builder;
 
 class DocForm
 {
     public static function configure(Schema $schema): Schema
     {
-        $docTypeFormat = fn ($get) => (int) $get('doc_type_id') === DocType::where('name', 'format')->value('id');
+        $docTypeFormat = fn ($get) => (int) $get('doc_type_id') === 1;
 
         return $schema
             ->components([
@@ -54,9 +56,10 @@ class DocForm
                                     ->required(),
                                 Select::make('doc_type_id')
                                     ->label(__('Doc type'))
-                                    ->relationship('type', 'label')
+                                    ->relationship('type', 'title')
                                     ->afterStateUpdated(function ($set) {
-                                        $set('storage_method_id', null);
+                                        $set('storage_method', null);
+                                        $set('retention_time', null);
                                         $set('recovery_method_id', null);
                                         $set('disposition_method_id', null);
                                     })
@@ -64,10 +67,11 @@ class DocForm
                                     ->native(false)
                                     ->reactive()
                                     ->required(),
-                                Select::make('storage_method_id')
+                                Select::make('storage_method')
                                     ->label(__('Storage method'))
-                                    ->relationship('storageMethod', 'label')
+                                    ->options(DocStorageEnum::class)
                                     ->afterStateUpdated(function ($set) {
+                                        $set('retention_time', null);
                                         $set('recovery_method_id', null);
                                         $set('disposition_method_id', null);
                                     })
@@ -75,12 +79,18 @@ class DocForm
                                     ->native(false)
                                     ->visible($docTypeFormat)
                                     ->required($docTypeFormat),
+                                TextInput::make('retention_time')
+                                    ->label(__('Retention time'))
+                                    ->afterLabel(Icon::make(Heroicon::InformationCircle)->tooltip(__('Retention time in months')))
+                                    ->numeric()
+                                    ->visible($docTypeFormat)
+                                    ->required($docTypeFormat),
                                 Select::make('recovery_method_id')
                                     ->label(__('Recovery method'))
                                     ->relationship(
                                         name: 'recoveryMethod',
                                         titleAttribute: 'title',
-                                        modifyQueryUsing: fn ($query, $get) => $query->where('storage_id', $get('storage_method_id'))
+                                        modifyQueryUsing: fn ($query, $get) => $query->where('storage_id', $get('storage_method'))
                                     )
                                     ->native(false)
                                     ->preload()
@@ -91,7 +101,7 @@ class DocForm
                                     ->relationship(
                                         name: 'dispositionMethod',
                                         titleAttribute: 'title',
-                                        modifyQueryUsing: fn ($query, $get) => $query->where('storage_id', $get('storage_method_id'))
+                                        modifyQueryUsing: fn ($query, $get) => $query->where('storage_id', $get('storage_method'))
                                     )
                                     ->native(false)
                                     ->preload()
@@ -105,7 +115,8 @@ class DocForm
                             ->schema([
                                 Toggle::make('confidential')
                                     ->label(__('doc.confidential'))
-                                    ->inline(false)
+                                    ->afterLabel(Icon::make(Heroicon::InformationCircle)
+                                        ->tooltip(__('Restricts the document to users outside the subprocess, except those authorized in the dropdown menu')))
                                     ->afterStateUpdated(fn ($set) => $set('accessToAdditionalUsers', null))
                                     ->columnSpanFull()
                                     ->reactive(),

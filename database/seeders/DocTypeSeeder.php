@@ -13,11 +13,11 @@ class DocTypeSeeder extends Seeder
     public function run(): void
     {
         $docTypes = [
-            ['name' => 'document', 'label' => 'Documento', 'acronym' => 'D'],
-            ['name' => 'instructive', 'label' => 'Instructivo', 'acronym' => 'I'],
-            ['name' => 'policy', 'label' => 'Política', 'acronym' => 'P'],
-            ['name' => 'matrix', 'label' => 'Matriz', 'acronym' => 'M'],
-            ['name' => 'format', 'label' => 'Formato', 'acronym' => 'F'],
+            ['title' => 'Formato', 'acronym' => 'F'],
+            ['title' => 'Documento', 'acronym' => 'D'],
+            ['title' => 'Instructivo', 'acronym' => 'I'],
+            ['title' => 'Política', 'acronym' => 'P'],
+            ['title' => 'Matriz', 'acronym' => 'M'],
         ];
 
         foreach ($docTypes as $docType) {

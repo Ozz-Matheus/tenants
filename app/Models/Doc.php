@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Enums\DocStorageEnum;
 use App\Enums\StatusEnum;
 use App\Traits\BelongsToHeadquarter;
 use Illuminate\Database\Eloquent\Builder;
@@ -23,16 +24,19 @@ class Doc extends Model implements AuditableContract
         'doc_type_id',
         'central_expiration_date',
         'months_for_review_date',
-        'storage_method_id',
+        'storage_method',
+        'retention_time',
         'recovery_method_id',
         'disposition_method_id',
         'confidential',
         'created_by_id',
+        'updated_by_id',
         'headquarter_id',
     ];
 
     protected $casts = [
         'central_expiration_date' => 'date',
+        'storage_method' => DocStorageEnum::class,
         'confidential' => 'boolean',
         'created_at' => 'datetime',
         'updated_at' => 'datetime',
@@ -59,11 +63,6 @@ class Doc extends Model implements AuditableContract
         return $this->belongsTo(Subprocess::class);
     }
 
-    public function storageMethod()
-    {
-        return $this->belongsTo(DocStorage::class, 'storage_method_id');
-    }
-
     public function recoveryMethod()
     {
         return $this->belongsTo(DocRecovery::class, 'recovery_method_id');
@@ -82,6 +81,11 @@ class Doc extends Model implements AuditableContract
     public function createdBy()
     {
         return $this->belongsTo(User::class, 'created_by_id')->withDefault();
+    }
+
+    public function updatedBy()
+    {
+        return $this->belongsTo(User::class, 'updated_by_id')->withDefault();
     }
 
     public function versions()

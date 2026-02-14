@@ -18,12 +18,13 @@ return new class extends Migration
             $table->foreignId('process_id')->constrained();
             $table->foreignId('subprocess_id')->constrained();
             $table->foreignId('doc_type_id')->constrained();
-            $table->foreignId('created_by_id')->nullable()->constrained('users')->nullOnDelete();
-            $table->foreignId('storage_method_id')->nullable()->constrained('doc_storages');
+            $table->integer('storage_method')->nullable();
             $table->integer('retention_time')->nullable();
             $table->foreignId('recovery_method_id')->nullable()->constrained('doc_recoveries');
             $table->foreignId('disposition_method_id')->nullable()->constrained('doc_dispositions');
             $table->boolean('confidential')->default(false);
+            $table->foreignId('created_by_id')->nullable()->constrained('users')->nullOnDelete();
+            $table->foreignId('updated_by_id')->nullable()->constrained('users')->nullOnDelete();
             $table->foreignId('headquarter_id')
                 ->constrained()
                 ->restrictOnDelete();

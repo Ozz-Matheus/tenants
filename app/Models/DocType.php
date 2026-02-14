@@ -7,8 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class DocType extends Model
 {
     protected $fillable = [
-        'name',
-        'label',
+        'title',
         'acronym',
     ];
 

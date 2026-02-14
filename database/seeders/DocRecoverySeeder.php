@@ -12,10 +12,13 @@ class DocRecoverySeeder extends Seeder
      */
     public function run(): void
     {
-        //
-        DocRecovery::factory()->createMany([
+        $docRecoveries = [
             ['storage_id' => 1, 'title' => 'Incice manual'],
             ['storage_id' => 2, 'title' => 'Búsqueda por metadatos'],
-        ]);
+        ];
+
+        foreach ($docRecoveries as $docRecovery) {
+            DocRecovery::create($docRecovery);
+        }
     }
 }

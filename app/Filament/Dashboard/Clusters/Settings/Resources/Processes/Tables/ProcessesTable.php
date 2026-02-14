@@ -2,7 +2,6 @@
 
 namespace App\Filament\Dashboard\Clusters\Settings\Resources\Processes\Tables;
 
-use Filament\Actions\BulkActionGroup;
 use Filament\Actions\EditAction;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
@@ -34,8 +33,7 @@ class ProcessesTable
                 EditAction::make(),
             ])
             ->toolbarActions([
-                BulkActionGroup::make([
-                ]),
+                //
             ]);
     }
 }

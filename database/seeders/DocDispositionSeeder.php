@@ -12,10 +12,13 @@ class DocDispositionSeeder extends Seeder
      */
     public function run(): void
     {
-        //
-        DocDisposition::factory()->createMany([
+        $docDispositions = [
             ['storage_id' => 1, 'title' => 'Destrucción fisica'],
             ['storage_id' => 2, 'title' => 'Borrado digital'],
-        ]);
+        ];
+
+        foreach ($docDispositions as $docDisposition) {
+            DocDisposition::create($docDisposition);
+        }
     }
 }

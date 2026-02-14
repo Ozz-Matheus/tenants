@@ -21,11 +21,14 @@ class DatabaseSeeder extends Seeder
             SubProcessSeeder::class,
             UserHasSubProcessesSeeder::class,
             UsersLeadSubProcessesSeeder::class,
+            // Contexto estrategico
+            StrategicContextSeeder::class,
             // Documentos
             DocTypeSeeder::class,
-            DocStorageSeeder::class,
             DocRecoverySeeder::class,
             DocDispositionSeeder::class,
+            // Riesgos
+            ItemValueSeeder::class,
         ]);
     }
 }

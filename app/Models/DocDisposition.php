@@ -2,15 +2,14 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
+use App\Enums\DocStorageEnum;
 use Illuminate\Database\Eloquent\Model;
 
 class DocDisposition extends Model
 {
-    /** @use HasFactory<\Database\Factories\DocDispositionFactory> */
-    use HasFactory;
-
     protected $fillable = ['storage_id', 'title'];
+
+    protected $casts = ['storage_id' => DocStorageEnum::class];
 
     /*
     |--------------------------------------------------------------------------
@@ -20,7 +19,7 @@ class DocDisposition extends Model
 
     public function storage()
     {
-        return $this->belongsTo(DocStorage::class, 'storage_id');
+        return $this->belongsTo(DocStorageEnum::class, 'storage_id');
     }
 
     public function docs()

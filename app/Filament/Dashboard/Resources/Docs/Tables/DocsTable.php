@@ -46,7 +46,7 @@ class DocsTable
                     ->copyable()
                     ->copyMessage(__('Copied to clipboard'))
                     ->searchable(),
-                TextColumn::make('type.label')
+                TextColumn::make('type.title')
                     ->label(__('Doc type')),
                 TextColumn::make('process.title')
                     ->label(__('Process')),
@@ -81,7 +81,7 @@ class DocsTable
             ->filters([
                 SelectFilter::make('doc_type_id')
                     ->label(__('Doc type'))
-                    ->relationship('type', 'label')
+                    ->relationship('type', 'title')
                     ->multiple()
                     ->searchable()
                     ->preload(),

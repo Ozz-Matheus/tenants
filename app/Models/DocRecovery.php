@@ -2,15 +2,14 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
+use App\Enums\DocStorageEnum;
 use Illuminate\Database\Eloquent\Model;
 
 class DocRecovery extends Model
 {
-    /** @use HasFactory<\Database\Factories\DocRecoveryFactory> */
-    use HasFactory;
-
     protected $fillable = ['storage_id', 'title'];
+
+    protected $casts = ['storage_id' => DocStorageEnum::class];
 
     /*
     |--------------------------------------------------------------------------
@@ -20,7 +19,7 @@ class DocRecovery extends Model
 
     public function storage()
     {
-        return $this->belongsTo(DocStorage::class, 'storage_id');
+        return $this->belongsTo(DocStorageEnum::class, 'storage_id');
     }
 
     public function docs()

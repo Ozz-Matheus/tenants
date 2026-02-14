@@ -8,7 +8,7 @@ use Filament\Support\Icons\Heroicon;
 
 class SettingsCluster extends Cluster
 {
-    protected static string|BackedEnum|null $navigationIcon = Heroicon::AdjustmentsHorizontal;
+    protected static string|BackedEnum|null $navigationIcon = Heroicon::Cog;
 
-    protected static ?int $navigationSort = 2;
+    protected static ?int $navigationSort = 3;
 }

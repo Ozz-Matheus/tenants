@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('doc_recoveries', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('storage_id')->constrained('doc_storages');
+            $table->integer('storage_id');
             $table->string('title');
             $table->timestamps();
         });

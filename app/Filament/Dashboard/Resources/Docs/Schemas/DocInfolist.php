@@ -2,7 +2,6 @@
 
 namespace App\Filament\Dashboard\Resources\Docs\Schemas;
 
-use App\Models\DocType;
 use Filament\Infolists\Components\IconEntry;
 use Filament\Infolists\Components\TextEntry;
 use Filament\Schemas\Components\Group;
@@ -25,7 +24,7 @@ class DocInfolist
                             TextEntry::make('title')
                                 ->label(__('Title'))
                                 ->columnSpan(2),
-                            TextEntry::make('type.label')
+                            TextEntry::make('type.title')
                                 ->label(__('Doc type'))
                                 ->badge(),
                             IconEntry::make('confidential')
@@ -33,6 +32,12 @@ class DocInfolist
                                 ->boolean()
                                 ->trueColor('danger')
                                 ->falseColor('gray'),
+                            TextEntry::make('accessToAdditionalUsers.name')
+                                ->label(__('Additional Users'))
+                                // ->listWithLineBreaks()
+                                ->badge()
+                                ->visible(fn ($record) => $record->confidential)
+                                ->columnSpan(3),
                         ])->columns(4),
 
                     // Sección: Contexto del Proceso
@@ -52,11 +57,16 @@ class DocInfolist
 
                 Group::make([
                     Section::make(__('Format Control'))
-                        ->visible(fn ($record) => $record->doc_type_id === DocType::where('name', 'format')->value('id'))
+                        ->visible(fn ($record) => $record->doc_type_id === 1)
+                        ->columns(2)
+                        ->collapsible()
                         ->schema([
-                            TextEntry::make('storageMethod.label')
+                            TextEntry::make('storage_method')
                                 ->label(__('Storage method'))
                                 ->listWithLineBreaks(),
+                            TextEntry::make('retention_time')
+                                ->label(__('Retention time'))
+                                ->suffix(__(' months')),
                             TextEntry::make('recoveryMethod.title')
                                 ->label(__('Recovery method')),
                             TextEntry::make('dispositionMethod.title')
@@ -64,16 +74,20 @@ class DocInfolist
                         ]),
 
                     Section::make(__('Metadata'))
+                        ->columns(2)
+                        ->collapsible()
                         ->schema([
                             TextEntry::make('createdBy.name')
                                 ->label(__('Created by')),
                             TextEntry::make('created_at')
                                 ->label(__('Created at'))
-                                ->dateTime(),
+                                ->since(),
+                            TextEntry::make('updatedBy.name')
+                                ->label(__('Updated by')),
                             TextEntry::make('updated_at')
                                 ->label(__('Updated at'))
                                 ->since(),
-                        ])->collapsible(),
+                        ]),
                 ])->columnSpan(1),
             ])->columns(3);
     }

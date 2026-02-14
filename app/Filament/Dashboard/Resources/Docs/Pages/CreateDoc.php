@@ -31,6 +31,7 @@ class CreateDoc extends CreateRecord
 
         $data['classification_code'] = app(DocService::class)->generateCode($data['doc_type_id'], $data['subprocess_id'], $data['headquarter_id'] ?? null);
         $data['created_by_id'] = $user->id;
+        $data['updated_by_id'] = $user->id;
 
         return $data;
     }
