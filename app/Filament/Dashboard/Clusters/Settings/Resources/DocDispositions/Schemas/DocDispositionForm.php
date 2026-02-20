@@ -2,7 +2,7 @@
 
 namespace App\Filament\Dashboard\Clusters\Settings\Resources\DocDispositions\Schemas;
 
-use App\Enums\DocStorageEnum;
+use App\Enums\StorageMethodEnum;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
 use Filament\Schemas\Components\Section;
@@ -22,9 +22,10 @@ class DocDispositionForm
                             ->unique(ignoreRecord: true)
                             ->disabled(fn (string $context) => $context === 'edit')
                             ->required(fn (string $context) => $context === 'create'),
-                        Select::make('storage_id')
-                            ->label(__('Storage method'))
-                            ->options(DocStorageEnum::class)
+                        Select::make('storage_method')
+                            ->label(__('doc.storage_method'))
+                            ->options(StorageMethodEnum::class)
+                            ->native(false)
                             ->disabled(fn (string $context) => $context === 'edit')
                             ->required(fn (string $context) => $context === 'create'),
                     ]),

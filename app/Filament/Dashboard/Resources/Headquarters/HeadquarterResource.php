@@ -18,7 +18,7 @@ class HeadquarterResource extends Resource
 {
     protected static ?string $model = Headquarter::class;
 
-    protected static string|BackedEnum|null $navigationIcon = Heroicon::Cog8Tooth;
+    protected static string|BackedEnum|null $navigationIcon = Heroicon::BuildingOffice;
 
     protected static ?string $recordTitleAttribute = 'name';
 

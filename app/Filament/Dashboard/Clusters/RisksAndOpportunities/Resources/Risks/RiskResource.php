@@ -6,6 +6,7 @@ use App\Filament\Dashboard\Clusters\RisksAndOpportunities\Resources\Risks\Pages\
 use App\Filament\Dashboard\Clusters\RisksAndOpportunities\Resources\Risks\Pages\EditRisk;
 use App\Filament\Dashboard\Clusters\RisksAndOpportunities\Resources\Risks\Pages\ListRisks;
 use App\Filament\Dashboard\Clusters\RisksAndOpportunities\Resources\Risks\Pages\ViewRisk;
+use App\Filament\Dashboard\Clusters\RisksAndOpportunities\Resources\Risks\RelationManagers\ControlsRelationManager;
 use App\Filament\Dashboard\Clusters\RisksAndOpportunities\Resources\Risks\Schemas\RiskForm;
 use App\Filament\Dashboard\Clusters\RisksAndOpportunities\Resources\Risks\Schemas\RiskInfolist;
 use App\Filament\Dashboard\Clusters\RisksAndOpportunities\Resources\Risks\Tables\RisksTable;
@@ -21,7 +22,7 @@ class RiskResource extends Resource
 {
     protected static ?string $model = Risk::class;
 
-    protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedRectangleStack;
+    protected static string|BackedEnum|null $navigationIcon = Heroicon::Stop;
 
     protected static ?string $cluster = RisksAndOpportunitiesCluster::class;
 
@@ -62,7 +63,7 @@ class RiskResource extends Resource
     public static function getRelations(): array
     {
         return [
-            //
+            ControlsRelationManager::class,
         ];
     }
 

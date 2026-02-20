@@ -56,7 +56,7 @@ class DocCreatedNotice extends Notification
     {
         return FilamentNotification::make()
             ->title($this->doc->title)
-            ->body(__('doc.versions.created_notice'))
+            ->body(__('doc.version.created_notice'))
             ->icon('heroicon-o-document-text')
             ->color('primary')
             ->status('primary')

@@ -29,22 +29,22 @@ class DocDispositionResource extends Resource
 
     public static function getModelLabel(): string
     {
-        return __('Doc Disposition');
+        return __('doc.disposition.model_label');
     }
 
     public static function getPluralModelLabel(): string
     {
-        return __('Doc Dispositions');
+        return __('doc.disposition.plural_model_label');
     }
 
     public static function getNavigationLabel(): string
     {
-        return __('Doc Dispositions');
+        return __('doc.disposition.plural_model_label');
     }
 
     public static function getNavigationGroup(): string
     {
-        return __('Document Management');
+        return __('doc.navigation_group');
     }
 
     public static function form(Schema $schema): Schema

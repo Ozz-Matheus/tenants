@@ -4,10 +4,13 @@ namespace App\Filament\Dashboard\Resources\Docs\Tables;
 
 use App\Enums\RoleEnum;
 use App\Enums\StatusEnum;
+use App\Exports\DocExports\DocExport;
+use App\Exports\DocExports\RelationshipsOfTheDocs;
 use App\Models\Doc;
 use App\Services\VersionService;
 use Filament\Actions\Action;
 use Filament\Actions\ActionGroup;
+use Filament\Actions\BulkAction;
 use Filament\Actions\BulkActionGroup;
 use Filament\Actions\DeleteAction;
 use Filament\Actions\DeleteBulkAction;
@@ -25,6 +28,8 @@ use Filament\Tables\Filters\TernaryFilter;
 use Filament\Tables\Filters\TrashedFilter;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Support\Collection;
+use Maatwebsite\Excel\Facades\Excel;
 
 class DocsTable
 {
@@ -33,7 +38,7 @@ class DocsTable
         return $table
             ->columns([
                 TextColumn::make('classification_code')
-                    ->label(__('doc.classification_code'))
+                    ->label(__('Classification code'))
                     ->limit(30)
                     ->tooltip(fn ($record) => $record->classification_code)
                     ->copyable()
@@ -47,7 +52,7 @@ class DocsTable
                     ->copyMessage(__('Copied to clipboard'))
                     ->searchable(),
                 TextColumn::make('type.title')
-                    ->label(__('Doc type')),
+                    ->label(__('doc.type.model_label')),
                 TextColumn::make('process.title')
                     ->label(__('Process')),
                 TextColumn::make('subprocess.title')
@@ -57,7 +62,7 @@ class DocsTable
                     ->badge()
                     ->placeholder('-'),
                 TextColumn::make('latestVersion.version')
-                    ->label(__('doc.version'))
+                    ->label(__('doc.version.model_label'))
                     ->sortable()
                     ->placeholder('-'),
                 TextColumn::make('confidential')
@@ -80,7 +85,7 @@ class DocsTable
             ])->defaultSort('id', 'desc')
             ->filters([
                 SelectFilter::make('doc_type_id')
-                    ->label(__('Doc type'))
+                    ->label(__('doc.type.model_label'))
                     ->relationship('type', 'title')
                     ->multiple()
                     ->searchable()
@@ -92,14 +97,14 @@ class DocsTable
                     ->searchable()
                     ->preload(),
                 SelectFilter::make('subprocess_id')
-                    ->label(__('Sub Process'))
+                    ->label(__('Subprocess'))
                     ->relationship('subprocess', 'title')
                     ->multiple()
                     ->searchable()
                     ->preload(),
                 SelectFilter::make('status')
                     ->label(__('Status'))
-                    ->options(StatusEnum::toOptions())
+                    ->options(StatusEnum::class)
                     ->multiple()
                     ->query(function (Builder $query, array $data): Builder {
                         $values = $data['values'] ?? [];
@@ -114,7 +119,7 @@ class DocsTable
                         );
                     }),
                 TernaryFilter::make('confidential')
-                    ->label(__('Confidential'))
+                    ->label(__('doc.confidential'))
                     ->trueLabel(__('Private'))
                     ->falseLabel(__('Public'))
                     ->native(false),
@@ -157,7 +162,7 @@ class DocsTable
 
                             return [
                                 Toggle::make('confidential')
-                                    ->label(__('Confidential'))
+                                    ->label(__('doc.confidential'))
                                     ->inline(false)
                                     ->default($record->confidential)
                                     ->afterStateUpdated($resetAccess)
@@ -190,6 +195,30 @@ class DocsTable
             ])
             ->toolbarActions([
                 BulkActionGroup::make([
+
+                    BulkAction::make('export')
+                        ->label(__('Export base'))
+                        ->icon('heroicon-o-arrow-down-tray')
+                        ->action(fn ($records) => Excel::download(
+                            new DocExport($records->pluck('id')->toArray()),
+                            'docs_'.now()->format('Y_m_d_His').'.xlsx'
+                        ))
+                        ->deselectRecordsAfterCompletion(),
+
+                    BulkAction::make('exportar_excel')
+                        ->label(__('Export with relationships'))
+                        ->icon('heroicon-o-document-arrow-down')
+                        ->action(function (Collection $records) {
+
+                            $docIds = $records->pluck('id')->all();
+
+                            return Excel::download(
+                                new RelationshipsOfTheDocs($docIds),
+                                'docs_y_relaciones_'.now()->format('Y_m_d_His').'.xlsx'
+                            );
+                        })
+                        ->deselectRecordsAfterCompletion(),
+
                     // DeleteBulkAction::make(),
                     // ForceDeleteBulkAction::make(),
                     // RestoreBulkAction::make(),

@@ -4,6 +4,7 @@ namespace App\Filament\Dashboard\Resources\Docs\Pages;
 
 use App\Enums\RoleEnum;
 use App\Enums\StatusEnum;
+use App\Exports\DocExports\VersionExport;
 use App\Filament\Dashboard\Resources\Docs\DocResource;
 use App\Filament\Pages\FileViewer;
 use App\Models\Subprocess;
@@ -14,6 +15,8 @@ use App\Traits\HasStandardFileUpload;
 use BackedEnum;
 use Filament\Actions\Action;
 use Filament\Actions\ActionGroup;
+use Filament\Actions\BulkAction;
+use Filament\Actions\BulkActionGroup;
 use Filament\Actions\CreateAction;
 use Filament\Actions\DeleteAction;
 use Filament\Forms\Components\Select;
@@ -24,6 +27,7 @@ use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Filters\SelectFilter;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
+use Maatwebsite\Excel\Facades\Excel;
 
 class ManageDocVersions extends ManageRelatedRecords
 {
@@ -33,16 +37,16 @@ class ManageDocVersions extends ManageRelatedRecords
 
     protected static string $relationship = 'versions';
 
-    protected static string|BackedEnum|null $navigationIcon = Heroicon::ClipboardDocumentList;
+    protected static string|BackedEnum|null $navigationIcon = Heroicon::DocumentText;
 
     public function getTitle(): string
     {
-        return __('doc.versions.model_label');
+        return __('doc.version.model_label');
     }
 
     public static function getNavigationLabel(): string
     {
-        return __('doc.versions.plural_model_label');
+        return __('doc.version.plural_model_label');
     }
 
     protected function getHeaderActions(): array
@@ -56,7 +60,7 @@ class ManageDocVersions extends ManageRelatedRecords
                 ->color('gray'),
 
             CreateAction::make()
-                ->label(__('doc.versions.actions.create'))
+                ->label(__('doc.version.actions.create'))
                 ->modalHeading() // Acá se le puede poner el titulo que se quiera al modal.
                 ->createAnother(false)
                 ->icon(Heroicon::DocumentPlus)
@@ -164,7 +168,7 @@ class ManageDocVersions extends ManageRelatedRecords
                 //
                 SelectFilter::make('status')
                     ->label(__('Status'))
-                    ->options(StatusEnum::toOptions())
+                    ->options(StatusEnum::class)
                     ->multiple()
                     ->searchable()
                     ->preload()
@@ -201,7 +205,7 @@ class ManageDocVersions extends ManageRelatedRecords
                             app(VersionStatusService::class)->pending($record);
 
                             AppNotifier::success(
-                                __('doc.versions.status_changed_to', ['status' => StatusEnum::PENDING->getLabel()])
+                                __('doc.version.status_changed_to', ['status' => StatusEnum::PENDING->getLabel()])
                             );
                         })
                         ->visible(function ($record) {
@@ -214,6 +218,19 @@ class ManageDocVersions extends ManageRelatedRecords
                             return auth()->user()->hasRole(RoleEnum::SUPER_ADMIN);
                         }),
                 ])->color('primary')->link()->label(false)->tooltip('Actions'),
+            ])
+            ->toolbarActions([
+                BulkActionGroup::make([
+
+                    BulkAction::make('export')
+                        ->label(__('Export base'))
+                        ->icon('heroicon-o-arrow-down-tray')
+                        ->action(fn ($records) => Excel::download(
+                            new VersionExport($records->pluck('id')->toArray()),
+                            'versions_'.now()->format('Y_m_d_His').'.xlsx'
+                        ))->deselectRecordsAfterCompletion(),
+
+                ]),
             ]);
     }
 }

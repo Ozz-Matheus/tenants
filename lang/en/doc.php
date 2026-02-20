@@ -1,20 +1,31 @@
 <?php
 
 return [
+    'navigation_group' => 'Document Management',
     'model_label' => 'Document',
     'plural_model_label' => 'Documents',
 
     // Columns & Filters
-    'classification_code' => 'Classification Code',
-    // 'doc_type' => 'Document Type',
-    // 'process' => 'Process', 🗣️
-    // 'sub_process' => 'Subprocess',
-    'version' => 'Version',
     'leads' => 'Leads',
     'Leader' => 'Leader',
+    'leaders' => 'Leaders',
     'confidential' => 'Confidentiality',
     'private' => 'Private',
     'public' => 'Public',
+    'latest_version' => 'Latest Version',
+    'meets' => 'Meets Requirements',
+    'storage_method' => 'Storage method',
+    'storage_method_physical' => 'Physical',
+    'storage_method_digital' => 'Digital',
+    'recovery_method' => 'Recovery method',
+    'disposition_method' => 'Disposition method',
+    'retention_time' => 'Tiempo de retención',
+
+    // Infolists
+    'id' => 'Document Identification',
+    'context' => 'Operational Context',
+    'control' => 'Format Control',
+    'data' => 'Metadata',
 
     // File viewer
     'decision_history' => 'Decision History',
@@ -28,8 +39,10 @@ return [
     // Actions
     'update_additional_users' => 'Update Additional Users',
     'access_additional_users' => 'Access for Additional Users',
+    'rejected_comment_label' => 'Confirm Rejection',
+    'rejected_comment_placeholder' => 'Reason for the rejection?',
 
-    'versions' => [
+    'version' => [
 
         'model_label' => 'Version History',
         'plural_model_label' => 'Versions',
@@ -42,5 +55,27 @@ return [
         'actions' => [
             'create' => 'Create Version',
         ],
+
+    ],
+
+    'type' => [
+
+        'model_label' => 'Doc Type',
+        'plural_model_label' => 'Doc Types',
+
+    ],
+
+    'recovery' => [
+
+        'model_label' => 'Doc Recovery',
+        'plural_model_label' => 'Doc Recoveries',
+
+    ],
+
+    'disposition' => [
+
+        'model_label' => 'Doc Disposition',
+        'plural_model_label' => 'Doc Dispositions',
+
     ],
 ];

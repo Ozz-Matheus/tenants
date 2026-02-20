@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Enums\StorageMethodEnum;
 use App\Models\DocRecovery;
 use Illuminate\Database\Seeder;
 
@@ -13,8 +14,8 @@ class DocRecoverySeeder extends Seeder
     public function run(): void
     {
         $docRecoveries = [
-            ['storage_id' => 1, 'title' => 'Incice manual'],
-            ['storage_id' => 2, 'title' => 'Búsqueda por metadatos'],
+            ['storage_method' => StorageMethodEnum::PHYSYCAL, 'title' => 'Incice manual'],
+            ['storage_method' => StorageMethodEnum::DIGITAL, 'title' => 'Búsqueda por metadatos'],
         ];
 
         foreach ($docRecoveries as $docRecovery) {

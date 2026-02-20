@@ -25,7 +25,7 @@ class DocResource extends Resource
 {
     protected static ?string $model = Doc::class;
 
-    protected static string|BackedEnum|null $navigationIcon = Heroicon::DocumentText;
+    protected static string|BackedEnum|null $navigationIcon = Heroicon::Document;
 
     protected static ?string $recordTitleAttribute = 'title';
 

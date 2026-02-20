@@ -29,6 +29,8 @@ class DatabaseSeeder extends Seeder
             DocDispositionSeeder::class,
             // Riesgos
             ItemValueSeeder::class,
+            EvaluationCriteriaSeeder::class,
+            EffectivenessLevelRangeSeeder::class,
         ]);
     }
 }

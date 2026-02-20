@@ -29,22 +29,22 @@ class DocTypeResource extends Resource
 
     public static function getModelLabel(): string
     {
-        return __('Doc Type');
+        return __('doc.type.model_label');
     }
 
     public static function getPluralModelLabel(): string
     {
-        return __('Doc Types');
+        return __('doc.type.plural_model_label');
     }
 
     public static function getNavigationLabel(): string
     {
-        return __('Doc Types');
+        return __('doc.type.plural_model_label');
     }
 
     public static function getNavigationGroup(): string
     {
-        return __('Document Management');
+        return __('doc.navigation_group');
     }
 
     public static function form(Schema $schema): Schema

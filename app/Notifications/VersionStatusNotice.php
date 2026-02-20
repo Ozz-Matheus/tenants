@@ -63,13 +63,13 @@ class VersionStatusNotice extends Notification
     {
         return FilamentNotification::make()
             ->title($this->version->file?->name)
-            ->body(__('doc.versions.status_notice').': '.$this->status?->getLabel())
+            ->body(__('doc.version.status_notice').': '.$this->status?->getLabel())
             ->icon($this->status?->getIcon())
             ->color($this->status?->getColor())
             ->actions([
                 Action::make('go_to_version')
                     ->label(__('Open'))
-                    ->button()
+                    ->color($this->status?->getColor())
                     ->url(FileViewer::getUrl(['file' => $this->version->file]))
                     ->openUrlInNewTab(),
             ])

@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('doc_recoveries', function (Blueprint $table) {
             $table->id();
-            $table->integer('storage_id');
+            $table->string('storage_method');
             $table->string('title');
             $table->timestamps();
         });

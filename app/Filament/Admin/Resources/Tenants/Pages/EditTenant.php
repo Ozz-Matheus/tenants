@@ -22,7 +22,7 @@ class EditTenant extends EditRecord
             Action::make('open')
                 ->label(trans('tenant.actions.view'))
                 ->icon('heroicon-s-link')
-                ->url(fn ($record) => $record->admin_url)
+                ->url(fn ($record) => $record->dashboard_url)
                 ->openUrlInNewTab(),
 
             DeleteAction::make()

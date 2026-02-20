@@ -15,17 +15,18 @@ class DocInfolist
         return $schema
             ->components([
                 Group::make([
-                    Section::make(__('Document Identification'))
+
+                    Section::make(__('doc.id'))
                         ->schema([
                             TextEntry::make('classification_code')
-                                ->label(__('doc.classification_code'))
+                                ->label(__('Classification code'))
                                 ->weight('bold')
                                 ->copyable(),
                             TextEntry::make('title')
                                 ->label(__('Title'))
                                 ->columnSpan(2),
                             TextEntry::make('type.title')
-                                ->label(__('Doc type'))
+                                ->label(__('doc.type.model_label'))
                                 ->badge(),
                             IconEntry::make('confidential')
                                 ->label(__('doc.confidential'))
@@ -34,21 +35,19 @@ class DocInfolist
                                 ->falseColor('gray'),
                             TextEntry::make('accessToAdditionalUsers.name')
                                 ->label(__('Additional Users'))
-                                // ->listWithLineBreaks()
                                 ->badge()
                                 ->visible(fn ($record) => $record->confidential)
                                 ->columnSpan(3),
                         ])->columns(4),
 
-                    // Sección: Contexto del Proceso
-                    Section::make(__('Operational Context'))
+                    Section::make(__('doc.context'))
                         ->schema([
                             TextEntry::make('process.title')
                                 ->label(__('Process'))
-                                ->icon('heroicon-m-cog'),
+                                ->icon('heroicon-m-information-circle'),
                             TextEntry::make('subprocess.title')
-                                ->label(__('Sub process'))
-                                ->icon('heroicon-m-arrow-right-circle'),
+                                ->label(__('Subprocess'))
+                                ->icon('heroicon-m-information-circle'),
                             TextEntry::make('headquarter.name')
                                 ->label(__('headquarter.model_label'))
                                 ->icon('heroicon-m-building-office'),
@@ -56,24 +55,24 @@ class DocInfolist
                 ])->columnSpan(2),
 
                 Group::make([
-                    Section::make(__('Format Control'))
+                    Section::make(__('doc.control'))
                         ->visible(fn ($record) => $record->doc_type_id === 1)
                         ->columns(2)
                         ->collapsible()
                         ->schema([
                             TextEntry::make('storage_method')
-                                ->label(__('Storage method'))
+                                ->label(__('doc.storage_method'))
                                 ->listWithLineBreaks(),
                             TextEntry::make('retention_time')
-                                ->label(__('Retention time'))
+                                ->label(__('doc.retention_time'))
                                 ->suffix(__(' months')),
                             TextEntry::make('recoveryMethod.title')
-                                ->label(__('Recovery method')),
+                                ->label(__('doc.recovery_method')),
                             TextEntry::make('dispositionMethod.title')
-                                ->label(__('Disposition method')),
+                                ->label(__('doc.disposition_method')),
                         ]),
 
-                    Section::make(__('Metadata'))
+                    Section::make(__('doc.data'))
                         ->columns(2)
                         ->collapsible()
                         ->schema([
@@ -89,6 +88,7 @@ class DocInfolist
                                 ->since(),
                         ]),
                 ])->columnSpan(1),
+
             ])->columns(3);
     }
 }

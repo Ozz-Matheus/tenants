@@ -18,7 +18,7 @@ return new class extends Migration
             $table->foreignId('process_id')->constrained();
             $table->foreignId('subprocess_id')->constrained();
             $table->foreignId('doc_type_id')->constrained();
-            $table->integer('storage_method')->nullable();
+            $table->string('storage_method')->nullable();
             $table->integer('retention_time')->nullable();
             $table->foreignId('recovery_method_id')->nullable()->constrained('doc_recoveries');
             $table->foreignId('disposition_method_id')->nullable()->constrained('doc_dispositions');

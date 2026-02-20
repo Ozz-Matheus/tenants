@@ -48,7 +48,7 @@ class Tenant extends BaseTenant implements TenantWithDatabase
     |--------------------------------------------------------------------------
     */
 
-    public function adminUrl(): Attribute
+    public function dashboardUrl(): Attribute
     {
         return Attribute::get(fn () => AppHelper::getTenantUrl(
             $this->domains->first()?->domain

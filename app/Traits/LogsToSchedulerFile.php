@@ -4,10 +4,10 @@ namespace App\Traits;
 
 trait LogsToSchedulerFile
 {
-    protected function logToSchedulerFile(string $message): void
+    protected function logToSchedulerFile(string $message, string $fileName = 'scheduler.log'): void
     {
-        // 1. Forzamos la ruta al storage central (fuera de la carpeta del tenant)
-        $filePath = base_path('storage/logs/scheduler.log');
+        // 1. Usamos storage_path (estándar de Laravel) y permitimos nombres dinámicos
+        $filePath = storage_path("logs/{$fileName}");
 
         // Aseguramos que el directorio logs exista (normalmente sí, pero por seguridad)
         $directory = dirname($filePath);
@@ -24,10 +24,11 @@ trait LogsToSchedulerFile
             : 'Central';
 
         // 3. Escribimos en el archivo único
+        // Agregamos LOCK_EX para prevenir corrupción de datos por concurrencia
         file_put_contents(
             $filePath,
             "[{$timestamp}] [Tenant: {$tenantId}] {$message}".PHP_EOL,
-            FILE_APPEND
+            FILE_APPEND | LOCK_EX
         );
     }
 }

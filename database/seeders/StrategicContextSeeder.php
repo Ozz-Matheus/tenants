@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Enums\StrategicContextTypeEnum;
 use App\Models\StrategicContext;
 use Illuminate\Database\Seeder;
 
@@ -14,17 +15,17 @@ class StrategicContextSeeder extends Seeder
     {
         $strategicContexts = [
             // Interno
-            ['type' => 1, 'title' => 'Estructura'],
-            ['type' => 1, 'title' => 'Recursos'],
-            ['type' => 1, 'title' => 'Cultura'],
-            ['type' => 1, 'title' => 'Estrategia'],
+            ['type' => StrategicContextTypeEnum::INTERNAL->value, 'title' => 'Estructura'],
+            ['type' => StrategicContextTypeEnum::INTERNAL->value, 'title' => 'Recursos'],
+            ['type' => StrategicContextTypeEnum::INTERNAL->value, 'title' => 'Cultura'],
+            ['type' => StrategicContextTypeEnum::INTERNAL->value, 'title' => 'Estrategia'],
             // Externo
-            ['type' => 2, 'title' => 'Político'],
-            ['type' => 2, 'title' => 'Económico'],
-            ['type' => 2, 'title' => 'Social'],
-            ['type' => 2, 'title' => 'Tecnológico'],
-            ['type' => 2, 'title' => 'Ecológico/Ambiental'],
-            ['type' => 2, 'title' => 'Legal'],
+            ['type' => StrategicContextTypeEnum::EXTERNAL->value, 'title' => 'Político'],
+            ['type' => StrategicContextTypeEnum::EXTERNAL->value, 'title' => 'Económico'],
+            ['type' => StrategicContextTypeEnum::EXTERNAL->value, 'title' => 'Social'],
+            ['type' => StrategicContextTypeEnum::EXTERNAL->value, 'title' => 'Tecnológico'],
+            ['type' => StrategicContextTypeEnum::EXTERNAL->value, 'title' => 'Ecológico/Ambiental'],
+            ['type' => StrategicContextTypeEnum::EXTERNAL->value, 'title' => 'Legal'],
         ];
 
         foreach ($strategicContexts as $strategicContext) {

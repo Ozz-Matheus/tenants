@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('evaluation_criterias', function (Blueprint $table) {
             $table->id();
-            $table->integer('context_type')->comment('Si es impacto, probabilidad o nivel de riesgo.');
+            $table->string('criteria_type')->comment('Si es impacto, probabilidad o nivel de riesgo.');
             $table->string('title');
             $table->string('description');
             $table->integer('min');

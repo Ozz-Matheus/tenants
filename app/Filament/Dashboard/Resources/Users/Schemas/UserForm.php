@@ -129,7 +129,8 @@ class UserForm
                             ->relationship('headquarter', 'name')
                             ->disabled(fn (?User $record) => $record ? auth()->user()->isProtectedFrom($record) : false)
                             ->native(false)
-                            ->required(),
+                            ->required()
+                            ->default(1),
                         Toggle::make('active')
                             ->label(trans('tenant.columns.is_active'))
                             ->disabled(fn (?User $record) => $record ? auth()->user()->isProtectedFrom($record) : false)

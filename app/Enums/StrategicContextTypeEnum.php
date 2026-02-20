@@ -4,10 +4,10 @@ namespace App\Enums;
 
 use Filament\Support\Contracts\HasLabel;
 
-enum StrategicContextTypeEnum: int implements HasLabel
+enum StrategicContextTypeEnum: string implements HasLabel
 {
-    case INTERNAL = 1;
-    case EXTERNAL = 2;
+    case INTERNAL = 'internal';
+    case EXTERNAL = 'external';
 
     public function getLabel(): ?string
     {

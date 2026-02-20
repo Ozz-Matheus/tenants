@@ -1,0 +1,72 @@
+<?php
+
+namespace App\Exports\DocExports;
+
+use App\Models\DocVersion;
+use Illuminate\Support\Collection;
+use Maatwebsite\Excel\Concerns\FromCollection;
+use Maatwebsite\Excel\Concerns\WithHeadings;
+use Maatwebsite\Excel\Concerns\WithMapping;
+use Maatwebsite\Excel\Concerns\WithTitle;
+
+class VersionsRelatedToDoc implements FromCollection, WithHeadings, WithMapping, WithTitle
+{
+    protected array $docIds;
+
+    public function __construct(array $docIds)
+    {
+        $this->docIds = $docIds;
+    }
+
+    public function title(): string
+    {
+        return '📚 Versiones relacionadas';
+    }
+
+    public function collection(): Collection
+    {
+        return DocVersion::query()
+            ->whereIn('doc_id', $this->docIds)
+            ->get();
+    }
+
+    public function map($version): array
+    {
+        return [
+            $version->doc->classification_code,
+            $version->file->name,
+            $version->file->readable_mime_type,
+            $version->file->readable_size,
+            $version->status?->getLabel() ?? __('Stateless'),
+            $version->version ?? '-',
+            $version->comment ?? '—',
+            optional($version->createdBy)->name,
+            optional($version->createdBy)->email,
+            $version->sha256_hash ? __('Yes') : 'No',
+            $version->isLatestVersion() ? __('Yes') : 'No',
+            $version->isCompliant() ? __('Yes') : 'No',
+            $version->created_at,
+            $version->updated_at,
+        ];
+    }
+
+    public function headings(): array
+    {
+        return [
+            __('Classification code'),
+            __('Name'),
+            __('Type'),
+            __('Size'),
+            __('Status'),
+            __('Version'),
+            __('Comment'),
+            __('Created by (name)'),
+            __('Created by (email)'),
+            __('Signed'),
+            __('doc.latest_version'),
+            __('doc.meets'),
+            __('Created at'),
+            __('Updated at'),
+        ];
+    }
+}

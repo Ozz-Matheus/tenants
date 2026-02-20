@@ -7,6 +7,7 @@ use App\Observers\TenantObserver;
 use App\Services\TenantStorageInitializer;
 use Filament\Support\Assets\Css;
 use Filament\Support\Facades\FilamentAsset;
+use Filament\Tables\Columns\Column;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Route;
@@ -34,8 +35,14 @@ class HoldingtecServiceProvider extends ServiceProvider
         $this->configureTenancyObserversAndEvents();
         $this->configureFilamentAssets();
 
+        // Permiso para restaurar desde Audit Log.
         Gate::define('restoreAudit', function ($user, $record = null) {
             return true;
+        });
+
+        // Permite deseleccionar columnas en los filtros de tabla.
+        Column::configureUsing(function (Column $column) {
+            $column->toggleable();
         });
 
     }

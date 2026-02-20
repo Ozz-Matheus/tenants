@@ -22,11 +22,20 @@ return [
     | Configuración Central Route
     |--------------------------------------------------------------------------
     |
-    | Credenciales predeterminadas para el usuario maestro en cada tenant.
     |
     */
 
     'central_domain' => env('CENTRAL_DOMAIN', 'localhost'),
+
+    /*
+    |--------------------------------------------------------------------------
+    | Configuración de Conexión para los backups
+    |--------------------------------------------------------------------------
+    |
+    |
+    */
+
+    'db_connection' => env('DB_CONNECTION', 'mysql'),
 
     /*
     |--------------------------------------------------------------------------

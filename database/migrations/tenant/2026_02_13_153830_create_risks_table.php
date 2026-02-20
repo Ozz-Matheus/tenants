@@ -13,18 +13,25 @@ return new class extends Migration
     {
         Schema::create('risks', function (Blueprint $table) {
             $table->id();
+            $table->string('classification_code')->unique();
             $table->string('title');
             $table->text('description');
             $table->foreignId('process_id')->constrained();
             $table->foreignId('subprocess_id')->constrained();
-            $table->integer('risk_type');
-            $table->integer('strategic_context_type');
+            $table->string('risk_type');
+            $table->string('strategic_context_type');
             $table->foreignId('inherent_impact_id')->constrained('evaluation_criterias');
             $table->foreignId('inherent_probability_id')->constrained('evaluation_criterias');
             $table->foreignId('inherent_level_id')->constrained('evaluation_criterias');
-
-            // Aca viene la parte del residual que se colocará mas adelante
-            $table->integer('treatment');
+            $table->string('treatment');
+            $table->foreignId('residual_impact_id')->constrained('evaluation_criterias');
+            $table->foreignId('residual_probability_id')->constrained('evaluation_criterias');
+            $table->foreignId('residual_level_id')->constrained('evaluation_criterias');
+            $table->foreignId('created_by_id')->nullable()->constrained('users')->nullOnDelete();
+            $table->foreignId('updated_by_id')->nullable()->constrained('users')->nullOnDelete();
+            $table->foreignId('headquarter_id')
+                ->constrained()
+                ->restrictOnDelete();
             $table->timestamps();
         });
     }

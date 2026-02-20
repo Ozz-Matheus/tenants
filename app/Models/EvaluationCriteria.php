@@ -2,22 +2,22 @@
 
 namespace App\Models;
 
-use App\Enums\ContextTypeEnum;
+use App\Enums\CriteriaTypeEnum;
 use Illuminate\Database\Eloquent\Model;
 
 class EvaluationCriteria extends Model
 {
     protected $fillable = [
-        'context_type',
+        'criteria_type',
         'title',
+        'description',
         'min',
         'max',
         'weight',
-        'description',
         'color',
     ];
 
     protected $casts = [
-        'context_type' => ContextTypeEnum::class,
+        'criteria_type' => CriteriaTypeEnum::class,
     ];
 }

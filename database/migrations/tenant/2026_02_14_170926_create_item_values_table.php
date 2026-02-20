@@ -13,7 +13,8 @@ return new class extends Migration
     {
         Schema::create('item_values', function (Blueprint $table) {
             $table->id();
-            $table->integer('item_type')->comment('Basicamente si es un impacto o una probabilidad');
+            $table->string('item_criteria_type')->comment('Si es para el impacto o para la probabilidad');
+            $table->string('strategic_context_type')->nullable()->comment('Solo si es impacto');
             $table->foreignId('strategic_context_id')->nullable()->comment('Solo si es impacto')->constrained();
             $table->string('title');
             $table->integer('value');

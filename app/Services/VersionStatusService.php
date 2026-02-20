@@ -25,7 +25,7 @@ class VersionStatusService
     public function pending(DocVersion $docVersion): void
     {
         $status = StatusEnum::PENDING;
-        $messageBody = __('Pending version ').$docVersion->version;
+        $messageBody = $this->getStatusMessage($status, $docVersion);
 
         $this->updateVersionStatus($docVersion, $status, $messageBody);
     }
@@ -33,7 +33,7 @@ class VersionStatusService
     public function rejected(DocVersion $docVersion): void
     {
         $status = StatusEnum::REJECTED;
-        $messageBody = __('Rejected version ').$docVersion->version;
+        $messageBody = $this->getStatusMessage($status, $docVersion);
 
         $this->updateVersionStatus($docVersion, $status, $messageBody);
     }
@@ -43,7 +43,7 @@ class VersionStatusService
 
         $status = StatusEnum::APPROVED;
 
-        $messageBody = __('Approved version ').$docVersion->version;
+        $messageBody = $this->getStatusMessage($status, $docVersion);
 
         $data = [
             'status' => $status,
@@ -63,6 +63,14 @@ class VersionStatusService
     | Métodos auxiliares privados.
     |--------------------------------------------------------------------------
     */
+
+    private function getStatusMessage(?StatusEnum $status, $docVersion): string
+    {
+        return __(
+            'emails.document_status_change.important_info_body',
+            ['status' => $status->getLabel(), 'version' => $docVersion->version]
+        );
+    }
 
     private function updateVersionStatus(DocVersion $docVersion, ?StatusEnum $status, ?string $messageBody = null): void
     {

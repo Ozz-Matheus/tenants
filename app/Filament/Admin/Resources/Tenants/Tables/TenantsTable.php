@@ -30,8 +30,8 @@ class TenantsTable
                 TextColumn::make('name')
                     ->label(trans('tenant.columns.name'))
                     ->searchable()
-                    ->description(fn ($record) => $record->admin_url)
-                    ->url(fn ($record) => $record->admin_url, shouldOpenInNewTab: true),
+                    ->description(fn ($record) => $record->dashboard_url)
+                    ->url(fn ($record) => $record->dashboard_url, shouldOpenInNewTab: true),
 
                 ToggleColumn::make('is_active')
                     ->sortable()
@@ -65,7 +65,7 @@ class TenantsTable
                     ->tooltip(trans('tenant.actions.view'))
                     ->iconButton()
                     ->icon('heroicon-s-link')
-                    ->url(fn ($record) => $record->admin_url, shouldOpenInNewTab: true)
+                    ->url(fn ($record) => $record->dashboard_url, shouldOpenInNewTab: true)
                     ->openUrlInNewTab(),
                 EditAction::make()
                     ->label(trans('tenant.actions.edit'))

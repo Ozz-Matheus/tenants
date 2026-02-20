@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('strategic_contexts', function (Blueprint $table) {
             $table->id();
-            $table->integer('type');
+            $table->string('type');
             $table->string('title');
             $table->timestamps();
         });

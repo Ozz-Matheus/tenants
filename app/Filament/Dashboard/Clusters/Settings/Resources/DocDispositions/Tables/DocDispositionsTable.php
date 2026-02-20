@@ -15,8 +15,8 @@ class DocDispositionsTable
                 TextColumn::make('title')
                     ->label(__('Title'))
                     ->searchable(),
-                TextColumn::make('storage_id')
-                    ->label(__('Storage method')),
+                TextColumn::make('storage_method')
+                    ->label(__('doc.storage_method')),
                 TextColumn::make('created_at')
                     ->label(__('Created at'))
                     ->date()

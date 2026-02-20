@@ -23,6 +23,7 @@ return [
         'uploaded_by' => 'Uploaded by',
         'date' => 'Date',
         'important_info' => 'Important Information',
+        'important_info_body' => "The version ':version' is located at ':status'.",
         'review_details' => 'To review all details and manage this document, click the button below:',
         'view_details_button' => 'View Document Details',
         'document_icon_alt' => 'Document Icon',

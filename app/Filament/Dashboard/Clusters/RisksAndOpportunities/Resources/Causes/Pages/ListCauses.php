@@ -5,6 +5,7 @@ namespace App\Filament\Dashboard\Clusters\RisksAndOpportunities\Resources\Causes
 use App\Filament\Dashboard\Clusters\RisksAndOpportunities\Resources\Causes\CauseResource;
 use Filament\Actions\CreateAction;
 use Filament\Resources\Pages\ListRecords;
+use Filament\Support\Icons\Heroicon;
 
 class ListCauses extends ListRecords
 {
@@ -13,7 +14,8 @@ class ListCauses extends ListRecords
     protected function getHeaderActions(): array
     {
         return [
-            CreateAction::make(),
+            CreateAction::make()
+                ->icon(Heroicon::PlusCircle),
         ];
     }
 }

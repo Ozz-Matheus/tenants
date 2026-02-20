@@ -135,10 +135,10 @@ class FileViewer extends Page implements HasTable
                     ->button()
                     ->form([
                         Textarea::make('comment')
-                            ->label(__('Confirm Rejection'))
+                            ->label(__('doc.rejected_comment_label'))
                             ->required()
                             ->maxLength(255)
-                            ->placeholder(__('Reason for rejection?')),
+                            ->placeholder(__('doc.rejected_comment_placeholder')),
                     ])
                     ->visible(fn (UserVersionDecision $record) => $this->canVote($record))
                     ->action(fn (UserVersionDecision $record, array $data) => $this->updateDecision($record, StatusEnum::REJECTED, $data['comment'])),

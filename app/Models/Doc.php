@@ -2,10 +2,9 @@
 
 namespace App\Models;
 
-use App\Enums\DocStorageEnum;
 use App\Enums\StatusEnum;
+use App\Enums\StorageMethodEnum;
 use App\Traits\BelongsToHeadquarter;
-use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use OwenIt\Auditing\Auditable as AuditableTrait;
@@ -36,7 +35,7 @@ class Doc extends Model implements AuditableContract
 
     protected $casts = [
         'central_expiration_date' => 'date',
-        'storage_method' => DocStorageEnum::class,
+        'storage_method' => StorageMethodEnum::class,
         'confidential' => 'boolean',
         'created_at' => 'datetime',
         'updated_at' => 'datetime',
@@ -103,28 +102,6 @@ class Doc extends Model implements AuditableContract
         return $this->hasOne(DocVersion::class)
             ->where('status', StatusEnum::APPROVED)
             ->latest('version');
-    }
-
-    /*
-    |--------------------------------------------------------------------------
-    | Scopes (Filtros Reutilizables)
-    |--------------------------------------------------------------------------
-    */
-
-    public function scopeExpired(Builder $query): void
-    {
-        // Lógica: Tiene fecha Y esa fecha es hoy o antes.
-        $query->whereNotNull('central_expiration_date')
-            ->whereDate('central_expiration_date', '<=', today());
-    }
-
-    public function scopeCurrent(Builder $query): void
-    {
-        // Lógica: NO tiene fecha (indefinido) O la fecha es futura.
-        $query->where(fn (Builder $q) => $q
-            ->whereNull('central_expiration_date')
-            ->orWhereDate('central_expiration_date', '>', today())
-        );
     }
 
     /*

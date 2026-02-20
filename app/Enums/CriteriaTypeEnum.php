@@ -4,11 +4,11 @@ namespace App\Enums;
 
 use Filament\Support\Contracts\HasLabel;
 
-enum ContextTypeEnum: int implements HasLabel
+enum CriteriaTypeEnum: string implements HasLabel
 {
-    case IMPACT = 1;
-    case PROBABILITY = 2;
-    case LEVEL = 3;
+    case IMPACT = 'impact';
+    case PROBABILITY = 'probability';
+    case LEVEL = 'level';
 
     public function getLabel(): ?string
     {

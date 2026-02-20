@@ -23,7 +23,7 @@ class SubprocessesTable
                     ->label(__('Title'))
                     ->searchable(),
                 TextColumn::make('leaders.name')
-                    ->label(__('Leaders'))
+                    ->label(__('doc.leaders'))
                     ->limit(30)
                     ->tooltip(
                         fn ($record) => $record->leaders->pluck('name')->join(', ')

@@ -4,12 +4,12 @@ namespace App\Enums;
 
 use Filament\Support\Contracts\HasLabel;
 
-enum RiskTypeEnum: int implements HasLabel
+enum RiskTypeEnum: string implements HasLabel
 {
-    case STRATEGIC = 1;
-    case OPERATIONAL = 2;
-    case LEGAL = 3;
-    case INFORMATION_SECURITY = 4;
+    case STRATEGIC = 'strategic';
+    case OPERATIONAL = 'operational';
+    case LEGAL = 'legal';
+    case INFORMATION_SECURITY = 'information_security';
 
     public function getLabel(): ?string
     {

@@ -23,6 +23,7 @@ return [
         'uploaded_by' => 'Subido por',
         'date' => 'Fecha',
         'important_info' => 'Información Importante',
+        'important_info_body' => "La versión ':version' se encuentra ':status'.",
         'review_details' => 'Para revisar todos los detalles y gestionar este documento, haz clic en el siguiente botón:',
         'view_details_button' => 'Ver Detalles del Documento',
         'document_icon_alt' => 'Icono de Documento',
