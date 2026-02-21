@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Enums\StatusEnum;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
@@ -32,6 +33,7 @@ class LegalRequirement extends Model
         'publication_date' => 'date',
         'last_review' => 'date',
         'next_review' => 'date',
+        'status' => StatusEnum::class,
     ];
 
     public function responsibleBy(): BelongsTo
